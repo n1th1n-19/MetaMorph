@@ -1,8 +1,9 @@
 "use client";
 import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState } from "react";
-import { ModernSimpleInput } from "@/cuicui/common-ui/inputs/modern-simple-input/modern-simple-input";
-import { useCopyToClipboard } from "@/cuicui/hooks/use-copy-to-clipboard";
+import "../CSS/qrcode.css";
+import Aurora from '../Components/Aurora';
+
 
 function downloadStringAsFile(data, filename) {
   const a = document.createElement("a");
@@ -11,7 +12,6 @@ function downloadStringAsFile(data, filename) {
   a.click();
 }
 
-// Function to handle PNG download
 const handleDownloadPng = (svgNode) => {
   const serializer = new XMLSerializer();
   const svgString = serializer.serializeToString(svgNode);
@@ -38,7 +38,7 @@ const handleDownloadPng = (svgNode) => {
 };
 
 export const QrCodeGenerator = () => {
-  const [value, setValue] = useState("https://www.modul.day");
+  const [value, setValue] = useState("https://www.github.com/n1th1n-19");
   const svgRef = useRef(null);
 
   const handleDownloadSvg = () => {
@@ -53,37 +53,35 @@ export const QrCodeGenerator = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <ModernSimpleInput
-        className="w-80 text-center"
+    <div className="qr-container">
+      
+      <h1 className="qr-title">QR Code</h1>
+      <input
+        className="qr-input"
         onChange={(e) => setValue(e.target.value)}
         value={value}
+        placeholder="Enter text or URL"
       />
-      <QRCodeSVG
-        bgColor={"#ffffff00"}
-        className="rounded-md dark:bg-white"
-        fgColor={"#2E5FFF"}
-        imageSettings={{
-          src: "https://www.modul.day/favicon.ico",
-          height: 22,
-          width: 22,
-          opacity: 1,
-          excavate: true,
-        }}
-        level="H"
-        marginSize={2}
-        minVersion={4}
-        ref={svgRef}
-        size={200}
-        title={value}
-        value={value}
-      />
-      <div className="flex flex-col gap-2 *:transform-gpu *:rounded-lg *:border *:border-neutral-400/10 *:bg-neutral-400/20 *:px-3 *:py-1.5 *:text-neutral-600 *:transition-transform *:dark:text-neutral-300">
-        <button className="hover:scale-90" onClick={handleDownloadSvg} type="button">
+      <div className="qr-code-wrapper">
+        <QRCodeSVG
+          bgColor={"#ffffff"}
+          className="qr-code"
+          fgColor={"#2E5FFF"}
+          level="H"
+          marginSize={2}
+          minVersion={4}
+          ref={svgRef}
+          size={200}
+          title={value}
+          value={value}
+        />
+      </div>
+      <div className="qr-buttons">
+        <button className="qr-button" onClick={handleDownloadSvg} type="button">
           Download SVG
         </button>
         <button
-          className="hover:scale-90"
+          className="qr-button"
           onClick={() => {
             if (svgRef.current) {
               handleDownloadPng(svgRef.current);
@@ -102,17 +100,20 @@ export const QrCodeGenerator = () => {
 export default QrCodeGenerator;
 
 const CopySvgButton = ({ svgRef }) => {
-  const [_copiedText, copyTextToClipboard, isCopied] = useCopyToClipboard();
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleCopySvg = (svgNode) => {
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svgNode);
-    copyTextToClipboard(svgString);
+    navigator.clipboard.writeText(svgString).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    });
   };
 
   return (
     <button
-      className="hover:scale-90"
+      className="qr-button"
       onClick={() => {
         if (svgRef.current) {
           handleCopySvg(svgRef.current);

@@ -4,8 +4,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App';
 import Layout from './layouts/dashboard';
 import DashboardPage from './pages';
-import OrdersPage from './pages/orders';
+import TextoSpeach from './pages/TextoSpeach.jsx'
 import SplashCursor from './layouts/SplashCurser.jsx'
+import QrCodeGenerator from './pages/QRCode.jsx'
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,12 @@ const router = createBrowserRouter([
             element: <DashboardPage />,
           },
           {
-            path: 'orders',
-            element: <OrdersPage />,
+            path: 'qr-code',
+            element: <QrCodeGenerator />,
+          },
+          {
+            path: 'to-speach',
+            element: <TextoSpeach />,
           },
           {
             path: 'splash',
