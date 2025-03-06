@@ -5,7 +5,7 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import { Outlet } from 'react-router-dom';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import CampaignIcon from '@mui/icons-material/Campaign';
-import TextoSpeach from './pages/TextoSpeach.jsx'
+import TextoSpeach from './pages/TextoSpeech.jsx'
 
 const NAVIGATION = [
   {
@@ -17,7 +17,7 @@ const NAVIGATION = [
     icon: <DashboardIcon />,
   },
   {
-    segment: 'to-speach',
+    segment: 'to-speech',
     title: 'Text to Speech',
     icon: <CampaignIcon />,
   },
