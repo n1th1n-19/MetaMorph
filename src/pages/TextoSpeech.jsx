@@ -3,7 +3,7 @@ import { useSpeech } from "react-text-to-speech";
 import { TextField, Button, Box } from "@mui/material";
 
 export default function TextoSpeech() {
-  const [userText, setUserText] = useState("This library is awesome!");
+  const [userText, setUserText] = useState("Enter your text");
   const {
     Text,
     speechStatus,
