@@ -1,4 +1,3 @@
-"use client";
 import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState } from "react";
 import "../CSS/qrcode.css";

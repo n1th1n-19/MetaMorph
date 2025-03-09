@@ -1,11 +1,10 @@
 import React from 'react';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import { Outlet } from 'react-router-dom';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import CampaignIcon from '@mui/icons-material/Campaign';
-import TextoSpeach from './pages/TextoSpeech.jsx'
+import theme from '../theme';
 
 const NAVIGATION = [
   {
@@ -26,17 +25,22 @@ const NAVIGATION = [
     title: 'QR Code',
     icon: <QrCodeIcon />,
   },
+  {
+    segment: 'file-converter',
+    title: 'File Converter',
+    icon: <QrCodeIcon />,
+  }
 ];
 
 const BRANDING = {
   title: "MetaMorph",
   logo: '',
-  homeUrl: '',
+  homeUrl: '/',
 };
 
 export default function App() {
   return (
-    <ReactRouterAppProvider navigation={NAVIGATION} branding={BRANDING}>
+    <ReactRouterAppProvider navigation={NAVIGATION} branding={BRANDING} theme={theme}>
       <Outlet />
     </ReactRouterAppProvider>
   );

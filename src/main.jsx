@@ -6,6 +6,7 @@ import Layout from './layouts/dashboard';
 import DashboardPage from './pages';
 import QrCodeGenerator from './pages/QRCode.jsx'
 import TextoSpeech from './pages/TextoSpeech.jsx'
+import FileConverter from './pages/FileConverter.jsx'
 
 const router = createBrowserRouter([
   {
@@ -27,10 +28,10 @@ const router = createBrowserRouter([
             path: 'to-speech',
             element: <TextoSpeech />,
           },
-          // {
-          //   path: 'splash',
-          //   element: <SplashCursor />,
-          // },
+          {
+            path: 'file-converter',
+            element: <FileConverter />,
+          }
         ],
       },
     ],
@@ -41,7 +42,7 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <RouterProvider router={router}/>
     </React.StrictMode>
   );
 }
