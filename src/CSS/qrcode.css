@@ -1,12 +1,11 @@
-/* QrCodeGenerator.css */
 .qr-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 16px;
     padding: 24px;
-    /* background-color: black; */
-    min-height: 100vh;
+    min-height: 80vh;
+    height: 80vh;
     color: white;
   }
   

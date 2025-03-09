@@ -1,8 +1,6 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState } from "react";
 import "../CSS/qrcode.css";
-import Aurora from '../Components/Aurora';
-
 
 function downloadStringAsFile(data, filename) {
   const a = document.createElement("a");
@@ -52,7 +50,7 @@ export const QrCodeGenerator = () => {
   };
 
   return (
-    <div className="qr-container">
+    <div className="qr-container" style={{overflow: "hidden"}}>
       
       <h1 className="qr-title">QR Code</h1>
       <input

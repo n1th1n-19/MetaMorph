@@ -4,6 +4,7 @@ import QrCodeIcon from '@mui/icons-material/QrCode';
 import { Outlet } from 'react-router-dom';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import theme from '../theme';
 
 const NAVIGATION = [
@@ -28,7 +29,7 @@ const NAVIGATION = [
   {
     segment: 'file-converter',
     title: 'File Converter',
-    icon: <QrCodeIcon />,
+    icon: <CompareArrowsIcon />,
   }
 ];
 
