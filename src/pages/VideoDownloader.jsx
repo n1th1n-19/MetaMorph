@@ -5,7 +5,7 @@ import axios from "axios";
 export default function VideoDownloader() {
   const [videoUrl, setVideoUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0); // Progress Bar State
 
   const downloadVideo = async () => {
     if (!videoUrl) {
@@ -17,13 +17,11 @@ export default function VideoDownloader() {
     setProgress(0);
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/download?url=${encodeURIComponent(videoUrl)}`, {
+      const response = await axios.get(`http://localhost:5000/download?url=${encodeURIComponent(videoUrl)}`, {
         responseType: "blob",
         onDownloadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setProgress(percentCompleted);
-          }
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
         },
       });
 
@@ -58,7 +56,7 @@ export default function VideoDownloader() {
       <Typography variant="h5">Video Downloader</Typography>
 
       <TextField
-        label="Enter Video URL (YouTube, Instagram, X)"
+        label="Enter Video URL"
         variant="outlined"
         fullWidth
         value={videoUrl}
@@ -75,8 +73,6 @@ export default function VideoDownloader() {
         }}
       />
 
-      {loading && <LinearProgress variant="determinate" value={progress} sx={{ width: "100%" }} />}
-
       <Button
         variant="contained"
         onClick={downloadVideo}
@@ -85,6 +81,15 @@ export default function VideoDownloader() {
       >
         {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Download Video"}
       </Button>
+
+      {loading && (
+        <Box sx={{ width: "100%", mt: 2 }}>
+          <Typography variant="body2" color="white">
+            Downloading... {progress}%
+          </Typography>
+          <LinearProgress variant="determinate" value={progress} sx={{ height: 8, borderRadius: "5px" }} />
+        </Box>
+      )}
     </Box>
   );
 }
