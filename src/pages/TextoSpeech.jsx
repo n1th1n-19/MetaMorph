@@ -1,90 +1,141 @@
 import React, { useState, useEffect } from "react";
-import { useSpeech } from "react-text-to-speech";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel, Box, Typography } from "@mui/material";
 
-export default function TextoSpeech() {
-  const [userText, setUserText] = useState("Enter your text");
-  const {
-    Text,
-    speechStatus,
-    start,
-    pause,
-    stop,
-  } = useSpeech({ text: userText });
+export default function TextToSpeech() {
+  const [text, setText] = useState("Hello, this is built-in TTS!");
+  const [selectedLanguage, setSelectedLanguage] = useState("en-US");
+  const [selectedVoice, setSelectedVoice] = useState("");
+  const [voices, setVoices] = useState([]);
 
-  const handleDownload = async () => {
-    const utterance = new SpeechSynthesisUtterance(userText);
+  useEffect(() => {
     const synth = window.speechSynthesis;
-
-    // Create audio context and destination
-    const audioContext = new AudioContext();
-    const destination = audioContext.createMediaStreamDestination();
-    const mediaRecorder = new MediaRecorder(destination.stream);
-    const chunks = [];
-
-    // Create an audio element to capture the speech output
-    const audio = new Audio();
-    audio.srcObject = destination.stream;
-    audio.play();
-
-    mediaRecorder.ondataavailable = (event) => {
-      chunks.push(event.data);
+    const fetchVoices = () => {
+      const availableVoices = synth.getVoices();
+      setVoices(availableVoices);
+      if (availableVoices.length > 0) {
+        setSelectedVoice(availableVoices[0].name);
+      }
     };
 
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(chunks, { type: "audio/wav" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "speech.wav";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = fetchVoices;
+    } else {
+      fetchVoices();
+    }
+  }, []);
 
-    mediaRecorder.start();
-    synth.speak(utterance);
+  const handlePlayAudio = () => {
+    if (!text.trim()) {
+      alert("Please enter some text!");
+      return;
+    }
 
-    // Stop recording when speech ends
-    utterance.onend = () => {
-      mediaRecorder.stop();
-    };
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = selectedLanguage;
+
+    const voice = voices.find((v) => v.name === selectedVoice);
+    if (voice) {
+      utterance.voice = voice;
+    }
+
+    window.speechSynthesis.speak(utterance);
   };
 
   return (
-    <Box className="speech-container">
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        width: "100%",
+        maxWidth: "500px",
+        margin: "auto",
+        padding: "20px",
+        backgroundColor: "#121212",
+        borderRadius: "8px",
+      }}
+    >
       <TextField
         label="Enter text"
         multiline
         rows={4}
         variant="outlined"
-        value={userText}
-        onChange={(e) => setUserText(e.target.value)}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         fullWidth
-        className="speech-input"
         sx={{
-          color: "white",
-          input: { color: "white" },
+          backgroundColor: "#1E1E1E",
+          borderRadius: "5px",
+          input: { color: "#FFFFFF" },
+          "& .MuiInputLabel-root": { color: "#B0BEC5" },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": { borderColor: "#444" },
+            "&:hover fieldset": { borderColor: "#666" },
+            "&.Mui-focused fieldset": { borderColor: "#00A8E8" },
+          },
         }}
       />
-      <Text className="speech-text" />
-      <Box className="speech-buttons">
-        {speechStatus !== "started" ? (
-          <Button className="speech-button start" onClick={start}>
-            Start
-          </Button>
-        ) : (
-          <Button className="speech-button pause" onClick={pause}>
-            Pause
-          </Button>
-        )}
-        <Button className="speech-button stop" onClick={stop}>
-          Stop
-        </Button>
-        <Button className="speech-button download" onClick={handleDownload}>
-          Download Audio
-        </Button>
-      </Box>
+
+      <FormControl fullWidth>
+        <InputLabel sx={{ color: "#B0BEC5" }}>Language</InputLabel>
+        <Select
+          value={selectedLanguage}
+          onChange={(e) => setSelectedLanguage(e.target.value)}
+          sx={{
+            backgroundColor: "#1E1E1E",
+            color: "#FFFFFF",
+            borderRadius: "5px",
+            "& .MuiOutlinedInput-notchedOutline": { borderColor: "#444" },
+            "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#666" },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#00A8E8" },
+          }}
+        >
+          <MenuItem value="en-US">English (US)</MenuItem>
+          <MenuItem value="en-GB">English (UK)</MenuItem>
+          <MenuItem value="es-ES">Spanish</MenuItem>
+          <MenuItem value="fr-FR">French</MenuItem>
+          <MenuItem value="de-DE">German</MenuItem>
+          <MenuItem value="hi-IN">Hindi</MenuItem>
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth>
+        <InputLabel sx={{ color: "#B0BEC5" }}>Voice</InputLabel>
+        <Select
+          value={selectedVoice}
+          onChange={(e) => setSelectedVoice(e.target.value)}
+          sx={{
+            backgroundColor: "#1E1E1E",
+            color: "#FFFFFF",
+            borderRadius: "5px",
+            "& .MuiOutlinedInput-notchedOutline": { borderColor: "#444" },
+            "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#666" },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#00A8E8" },
+          }}
+        >
+          {voices.length > 0 ? (
+            voices.map((voice) => (
+              <MenuItem key={voice.name} value={voice.name}>
+                {voice.name} ({voice.lang})
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>No voices available</MenuItem>
+          )}
+        </Select>
+      </FormControl>
+
+      <Button
+        onClick={handlePlayAudio}
+        sx={{
+          textTransform: "none",
+          color: "#00A8E8",
+          fontSize: "16px",
+          "&:hover": { color: "#0086C2" },
+        }}
+      >
+        PLAY AUDIO
+      </Button>
     </Box>
   );
 }
