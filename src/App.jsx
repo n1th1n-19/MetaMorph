@@ -5,12 +5,16 @@ import { Outlet } from 'react-router-dom';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import LinkIcon from "@mui/icons-material/Link";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+
+
 import theme from '../theme';
 
 const NAVIGATION = [
   {
     kind: 'header',
-    title: 'Main items',
+    title: 'Main Tools',
   },
   {
     title: 'Dashboard',
@@ -21,6 +25,11 @@ const NAVIGATION = [
     title: 'Text to Speech',
     icon: <CampaignIcon />,
   },
+  // {
+  //   segment: 'speech-to-text',
+  //   title: 'Speech to Text',
+  //   icon: <CampaignIcon />,
+  // },
   {
     segment: 'qr-code',
     title: 'QR Code',
@@ -30,7 +39,17 @@ const NAVIGATION = [
     segment: 'file-converter',
     title: 'File Converter',
     icon: <CompareArrowsIcon />,
-  }
+  },
+  {
+    segment: 'url-shortener',
+    title: 'URL Shortener',
+    icon: <LinkIcon />,
+  },
+  {
+    segment: 'ocr-extractor',
+    title: 'OCR Extractor',
+    icon: <TextFieldsIcon />,
+  },
 ];
 
 const BRANDING = {

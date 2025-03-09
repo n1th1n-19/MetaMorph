@@ -7,6 +7,9 @@ import DashboardPage from './pages';
 import QrCodeGenerator from './pages/QRCode.jsx'
 import TextoSpeech from './pages/TextoSpeech.jsx'
 import FileConverter from './pages/FileConverter.jsx'
+// import SpeechToText from './pages/SpeechToText.jsx'
+import URLShortener from './pages/URLShortener.jsx'
+import OCRExtractor from './pages/OCRExtractor.jsx'
 
 const router = createBrowserRouter([
   {
@@ -28,10 +31,22 @@ const router = createBrowserRouter([
             path: 'to-speech',
             element: <TextoSpeech />,
           },
+          // {
+          //   path: 'speech-to-text',
+          //   element: <SpeechToText />,
+          // },
           {
             path: 'file-converter',
             element: <FileConverter />,
-          }
+          },
+          {
+            path: 'url-shortener',
+            element: <URLShortener />,
+          },
+          {
+            path: 'ocr-extractor',
+            element: <OCRExtractor />,
+          },
         ],
       },
     ],
