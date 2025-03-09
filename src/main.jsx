@@ -10,6 +10,7 @@ import FileConverter from './pages/FileConverter.jsx'
 // import SpeechToText from './pages/SpeechToText.jsx'
 import URLShortener from './pages/URLShortener.jsx'
 import OCRExtractor from './pages/OCRExtractor.jsx'
+import VideoDownloader from './pages/VideoDownloader.jsx'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
           {
             path: 'ocr-extractor',
             element: <OCRExtractor />,
+          },
+          {
+            path: 'video-downloader', 
+            element: <VideoDownloader />,
           },
         ],
       },

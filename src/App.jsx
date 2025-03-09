@@ -50,6 +50,11 @@ const NAVIGATION = [
     title: 'OCR Extractor',
     icon: <TextFieldsIcon />,
   },
+  {
+    segment: 'video-downloader',
+    title: 'Video Downloader',
+    icon: <TextFieldsIcon />,
+  },
 ];
 
 const BRANDING = {
