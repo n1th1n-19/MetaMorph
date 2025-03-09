@@ -5,7 +5,7 @@ import axios from "axios";
 export default function VideoDownloader() {
   const [videoUrl, setVideoUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0); // Progress Bar State
+  const [progress, setProgress] = useState(0);
 
   const downloadVideo = async () => {
     if (!videoUrl) {
@@ -17,11 +17,13 @@ export default function VideoDownloader() {
     setProgress(0);
 
     try {
-      const response = await axios.get(`http://localhost:5000/download?url=${encodeURIComponent(videoUrl)}`, {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/download?url=${encodeURIComponent(videoUrl)}`, {
         responseType: "blob",
         onDownloadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setProgress(percentCompleted);
+          if (progressEvent.total) {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
         },
       });
 
@@ -56,7 +58,7 @@ export default function VideoDownloader() {
       <Typography variant="h5">Video Downloader</Typography>
 
       <TextField
-        label="URL - X/Youtube/Instagram"
+        label="Enter Video URL (YouTube, Instagram, X)"
         variant="outlined"
         fullWidth
         value={videoUrl}
@@ -72,6 +74,8 @@ export default function VideoDownloader() {
           },
         }}
       />
+
+      {loading && <LinearProgress variant="determinate" value={progress} sx={{ width: "100%" }} />}
 
       <Button
         variant="contained"
