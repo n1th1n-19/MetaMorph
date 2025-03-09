@@ -1,35 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextField, Box, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { useSpeech } from "react-text-to-speech";
+import { TextField, Button, Box } from "@mui/material";
 
-export default function TextToSpeech() {
-  const [text, setText] = useState("Hello, this is built-in TTS!");
-  const [voices, setVoices] = useState([]);
-  const [selectedVoice, setSelectedVoice] = useState(null);
-  const [selectedLang, setSelectedLang] = useState("en-US");
+export default function TextoSpeech() {
+  const [userText, setUserText] = useState("Enter your text");
+  const {
+    Text,
+    speechStatus,
+    start,
+    pause,
+    stop,
+  } = useSpeech({ text: userText });
 
-  // Load available voices
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
-      setVoices(availableVoices);
-      setSelectedVoice(availableVoices.find((v) => v.lang === "en-US") || availableVoices[0]); // Default to English
+  const handleDownload = async () => {
+    const utterance = new SpeechSynthesisUtterance(userText);
+    const synth = window.speechSynthesis;
+
+    // Create audio context and destination
+    const audioContext = new AudioContext();
+    const destination = audioContext.createMediaStreamDestination();
+    const mediaRecorder = new MediaRecorder(destination.stream);
+    const chunks = [];
+
+    // Create an audio element to capture the speech output
+    const audio = new Audio();
+    audio.srcObject = destination.stream;
+    audio.play();
+
+    mediaRecorder.ondataavailable = (event) => {
+      chunks.push(event.data);
     };
 
-    loadVoices();
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-  }, []);
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(chunks, { type: "audio/wav" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "speech.wav";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
 
-  const handlePlayAudio = () => {
-    if (!text) {
-      alert("Enter text first!");
-      return;
-    }
+    mediaRecorder.start();
+    synth.speak(utterance);
 
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = selectedLang;
-    speech.voice = selectedVoice;
-
-    window.speechSynthesis.speak(speech);
+    // Stop recording when speech ends
+    utterance.onend = () => {
+      mediaRecorder.stop();
+    };
   };
 
   return (
@@ -39,39 +58,32 @@ export default function TextToSpeech() {
         multiline
         rows={4}
         variant="outlined"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={userText}
+        onChange={(e) => setUserText(e.target.value)}
         fullWidth
+        className="speech-input"
+        sx={{
+          color: "white",
+          input: { color: "white" },
+        }}
       />
-
-      {/* Language Selection */}
-      <FormControl fullWidth sx={{ marginTop: 2 }}>
-        <InputLabel>Language</InputLabel>
-        <Select value={selectedLang} onChange={(e) => setSelectedLang(e.target.value)}>
-          <MenuItem value="en-US">English (US)</MenuItem>
-          <MenuItem value="hi-IN">Hindi</MenuItem>
-          <MenuItem value="es-ES">Spanish</MenuItem>
-          <MenuItem value="fr-FR">French</MenuItem>
-          <MenuItem value="de-DE">German</MenuItem>
-        </Select>
-      </FormControl>
-
-      {/* Voice Selection */}
-      <FormControl fullWidth sx={{ marginTop: 2 }}>
-        <InputLabel>Voice</InputLabel>
-        <Select value={selectedVoice?.name || ""} onChange={(e) => setSelectedVoice(voices.find(v => v.name === e.target.value))}>
-          {voices
-            .filter(voice => voice.lang === selectedLang) // Filter voices by selected language
-            .map((voice, index) => (
-              <MenuItem key={index} value={voice.name}>
-                {voice.name} ({voice.lang})
-              </MenuItem>
-            ))}
-        </Select>
-      </FormControl>
-
-      <Box className="speech-buttons" sx={{ marginTop: 2 }}>
-        <Button onClick={handlePlayAudio}>Play Audio</Button>
+      <Text className="speech-text" />
+      <Box className="speech-buttons">
+        {speechStatus !== "started" ? (
+          <Button className="speech-button start" onClick={start}>
+            Start
+          </Button>
+        ) : (
+          <Button className="speech-button pause" onClick={pause}>
+            Pause
+          </Button>
+        )}
+        <Button className="speech-button stop" onClick={stop}>
+          Stop
+        </Button>
+        <Button className="speech-button download" onClick={handleDownload}>
+          Download Audio
+        </Button>
       </Box>
     </Box>
   );
