@@ -6,14 +6,14 @@ import SplashCursor from '../layouts/SplashCurser.jsx'
 
 export default function HomePage() {
   return (    
-     <>
+     < style={{background:{<Aurora />}}}>
      {/* <ASCIIText
   text='hello_world'
   enableWaves={true}
   asciiFontSize={8}
 /> */}
     <SplashCursor />
-      <Aurora />
+      
      </>
   );
 }
