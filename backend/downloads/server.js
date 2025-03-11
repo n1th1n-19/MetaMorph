@@ -23,7 +23,7 @@ app.get("/download", async (req, res) => {
     });
 
     res.download(outputPath, "downloaded-video.mp4", () => {
-      fs.unlinkSync(outputPath); // Delete file after download
+      fs.unlinkSync(outputPath);     
     });
   } catch (error) {
     console.error("Error downloading video:", error);
