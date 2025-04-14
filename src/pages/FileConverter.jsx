@@ -43,7 +43,6 @@ export default function FileFormatConverter() {
   const [progress, setProgress] = useState(0);
   const [availableFormats, setAvailableFormats] = useState([]);
 
-  // Format definitions with source and target compatibility
   const formatDefinitions = {
     xlsx: { name: "Excel Workbook", targets: ["csv", "json", "txt"] },
     xls: { name: "Excel 97-2003 Workbook", targets: ["csv", "json", "txt"] },
@@ -54,7 +53,6 @@ export default function FileFormatConverter() {
     txt: { name: "Text File", targets: ["pdf", "docx"] }
   };
 
-  // Update available output formats when input file changes
   useEffect(() => {
     if (file) {
       const fileExt = file.name.split(".").pop().toLowerCase();
@@ -62,7 +60,6 @@ export default function FileFormatConverter() {
         const targetFormats = formatDefinitions[fileExt].targets;
         setAvailableFormats(targetFormats);
         
-        // Automatically select first available format if current isn't compatible
         if (!targetFormats.includes(format)) {
           setFormat(targetFormats[0]);
         }
@@ -83,7 +80,6 @@ export default function FileFormatConverter() {
   };
 
   const getFileIcon = (extension) => {
-    // This would be better with actual file type icons
     return <FilePresent />;
   };
 
@@ -92,7 +88,7 @@ export default function FileFormatConverter() {
     setConvertedData(null);
     const uploadedFile = event.target.files[0];
     if (uploadedFile) {
-      if (uploadedFile.size > 15 * 1024 * 1024) { // 15MB limit
+      if (uploadedFile.size > 15 * 1024 * 1024) { 
         setError("File is too large. Maximum size is 15MB.");
         return;
       }
@@ -118,7 +114,7 @@ export default function FileFormatConverter() {
     
     const uploadedFile = event.dataTransfer.files[0];
     if (uploadedFile) {
-      if (uploadedFile.size > 15 * 1024 * 1024) { // 15MB limit
+      if (uploadedFile.size > 15 * 1024 * 1024) { 
         setError("File is too large. Maximum size is 15MB.");
         return;
       }
@@ -128,7 +124,6 @@ export default function FileFormatConverter() {
   };
 
   const simulateProgress = () => {
-    // Simulate conversion progress
     setProgress(0);
     const interval = setInterval(() => {
       setProgress(prev => {
@@ -159,7 +154,6 @@ export default function FileFormatConverter() {
     setConvertedData(null);
     setError("");
     
-    // Start progress simulation
     const stopProgress = simulateProgress();
 
     const reader = new FileReader();
@@ -167,7 +161,6 @@ export default function FileFormatConverter() {
       const data = e.target.result;
 
       try {
-        // Excel conversions
         if (fileExt === "xlsx" || fileExt === "xls") {
           const workbook = XLSX.read(data, { type: "array" });
           const sheetName = workbook.SheetNames[0];
@@ -181,7 +174,6 @@ export default function FileFormatConverter() {
             setConvertedData(XLSX.utils.sheet_to_txt(sheet));
           }
         } 
-        // CSV conversions
         else if (fileExt === "csv") {
           const workbook = XLSX.read(data, { type: "array" });
           const sheetName = workbook.SheetNames[0];
@@ -190,7 +182,6 @@ export default function FileFormatConverter() {
           if (format === "json") {
             setConvertedData(JSON.stringify(XLSX.utils.sheet_to_json(sheet), null, 2));
           } else if (format === "xlsx") {
-            // For xlsx, we'll need to create a downloadable Excel file
             const newWorkbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(newWorkbook, sheet, "Sheet1");
             const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
@@ -201,7 +192,6 @@ export default function FileFormatConverter() {
             setConvertedData(XLSX.utils.sheet_to_txt(sheet));
           }
         }
-        // JSON conversions
         else if (fileExt === "json") {
           const jsonData = JSON.parse(data);
           
@@ -220,7 +210,6 @@ export default function FileFormatConverter() {
             setConvertedData(JSON.stringify(jsonData, null, 2));
           }
         }
-        // DOCX conversions
         else if (fileExt === "docx") {
           if (format === "txt") {
             const result = await mammoth.extractRawText({ arrayBuffer: data });
@@ -229,7 +218,6 @@ export default function FileFormatConverter() {
             setError("Direct DOCX to PDF conversion isn't fully supported yet.");
           }
         } 
-        // PDF conversions
         else if (fileExt === "pdf" && format === "txt") {
           try {
             const pdfDoc = await PDFDocument.load(data);
@@ -237,8 +225,6 @@ export default function FileFormatConverter() {
             let extractedText = "";
             
             for (let i = 0; i < pageCount; i++) {
-              // This is simplified - pdf-lib doesn't actually support text extraction well
-              // In real implementation, use pdf.js or another library
               extractedText += `[Content from page ${i+1}]\n\n`;
             }
             
@@ -247,7 +233,6 @@ export default function FileFormatConverter() {
             throw new Error(`PDF processing error: ${pdfError.message}`);
           }
         } 
-        // Text conversions
         else if (fileExt === "txt") {
           const textContent = new TextDecoder().decode(new Uint8Array(data));
           
@@ -259,7 +244,6 @@ export default function FileFormatConverter() {
           throw new Error("Unsupported conversion.");
         }
         
-        // Set progress to 100% and show success message
         setProgress(100);
         setSuccess(`Successfully converted to ${format.toUpperCase()} format!`);
         
@@ -268,7 +252,6 @@ export default function FileFormatConverter() {
         setError(`Error during conversion: ${error.message}`);
       } finally {
         setIsConverting(false);
-        // Clear progress simulation
         stopProgress();
       }
     };
@@ -301,7 +284,6 @@ export default function FileFormatConverter() {
     }
 
     try {
-      // Handle special case for Excel downloads which are already processed
       if (convertedData === "Excel file prepared for download") {
         setSuccess("Excel file has been downloaded");
         return;
@@ -337,7 +319,6 @@ export default function FileFormatConverter() {
     setSuccess("");
   };
   
-  // Get appropriate format label
   const getFormatName = (formatExt) => {
     const formats = {
       txt: "Text (TXT)",
@@ -577,7 +558,6 @@ export default function FileFormatConverter() {
         </Button>
       )}
 
-      {/* File conversion information */}
       {file && availableFormats.length > 0 && (
         <Box sx={{ 
           display: "flex", 
@@ -594,14 +574,12 @@ export default function FileFormatConverter() {
         </Box>
       )}
 
-      {/* Error Snackbar */}
       <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
       </Snackbar>
       
-      {/* Success Snackbar */}
       <Snackbar open={Boolean(success)} autoHideDuration={3000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           {success}

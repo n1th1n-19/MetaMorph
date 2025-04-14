@@ -9,7 +9,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 export default function OCRExtractor() {
-  // State management
   const [image, setImage] = useState(null);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,26 +17,21 @@ export default function OCRExtractor() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   
-  // OCR settings
   const [language, setLanguage] = useState("eng");
-  const [ocrMode, setOcrMode] = useState(1); // LSTM OCR Engine
-  const [pageSegMode, setPageSegMode] = useState(3); // Auto-detect blocks of text
+  const [ocrMode, setOcrMode] = useState(1);
+  const [pageSegMode, setPageSegMode] = useState(3); 
   
-  // Refs
   const fileInputRef = useRef(null);
   const textAreaRef = useRef(null);
 
-  // Handle file upload
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Validate file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
         setError("File too large. Please upload an image smaller than 10MB.");
         return;
       }
       
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         setError("Please upload a valid image file.");
         return;
@@ -50,7 +44,6 @@ export default function OCRExtractor() {
     }
   };
 
-  // Clear current image and text
   const handleClear = () => {
     setImage(null);
     setText("");
@@ -61,7 +54,6 @@ export default function OCRExtractor() {
     }
   };
 
-  // Perform OCR with selected language and settings
   const extractText = async () => {
     if (!image) {
       setError("Please upload an image first!");
@@ -100,13 +92,11 @@ export default function OCRExtractor() {
     }
   };
 
-  // Copy to Clipboard
   const copyToClipboard = () => {
     if (navigator.clipboard && text) {
       navigator.clipboard.writeText(text)
         .then(() => {
           setSnackbarOpen(true);
-          // Focus after copying to improve UX
           if (textAreaRef.current) {
             textAreaRef.current.focus();
           }
@@ -117,7 +107,6 @@ export default function OCRExtractor() {
     }
   };
 
-  // Handle snackbar close
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };

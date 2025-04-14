@@ -31,7 +31,6 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 
 export default function URLShortener() {
-  // Core state
   const [originalUrl, setOriginalUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -39,35 +38,29 @@ export default function URLShortener() {
   const [showHistory, setShowHistory] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   
-  // Notification state
   const [notification, setNotification] = useState({
     open: false,
     message: "",
     severity: "success"
   });
 
-  // URL history state
   const [urlHistory, setUrlHistory] = useState(() => {
     const savedHistory = localStorage.getItem("url-shortener-history");
     return savedHistory ? JSON.parse(savedHistory) : [];
   });
   
-  // References
   const urlInputRef = useRef(null);
   
-  // Persist URL history to localStorage
   useEffect(() => {
     localStorage.setItem("url-shortener-history", JSON.stringify(urlHistory));
   }, [urlHistory]);
   
-  // URL validation function
   const validateUrl = (url) => {
     if (!url.trim()) {
       return "URL cannot be empty";
     }
     
     try {
-      // Check if URL is valid by trying to construct URL object
       new URL(url);
       return "";
     } catch (error) {
@@ -75,20 +68,16 @@ export default function URLShortener() {
     }
   };
 
-  // Handle URL input change
   const handleUrlChange = (e) => {
     const url = e.target.value;
     setOriginalUrl(url);
     
-    // Clear error if input is valid or empty
     if (!url || validateUrl(url) === "") {
       setUrlError("");
     }
   };
 
-  // Generate short URL using TinyURL API
   const generateShortUrl = async () => {
-    // Validate URL
     const error = validateUrl(originalUrl);
     if (error) {
       setUrlError(error);
@@ -98,8 +87,6 @@ export default function URLShortener() {
     setIsLoading(true);
     
     try {
-      // Use TinyURL API to create a short URL
-      // Note: In a real implementation, you'd use your own API key
       const apiUrl = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(originalUrl)}`;
       
       const response = await fetch(apiUrl);
@@ -110,11 +97,9 @@ export default function URLShortener() {
       
       const shortLink = await response.text();
       
-      // Update state
       setShortUrl(shortLink);
       setUrlError("");
       
-      // Add to history
       const timestamp = new Date().toISOString();
       const newEntry = {
         id: nanoid(),
@@ -126,7 +111,6 @@ export default function URLShortener() {
       
       setUrlHistory(prevHistory => [newEntry, ...prevHistory].slice(0, 10)); // Keep last 10 entries
       
-      // Show success notification
       showNotification("URL shortened successfully!", "success");
     } catch (error) {
       console.error("Error generating short URL:", error);
@@ -136,7 +120,6 @@ export default function URLShortener() {
     }
   };
 
-  // Copy short URL to clipboard
   const copyToClipboard = async (textToCopy = shortUrl) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
@@ -147,13 +130,11 @@ export default function URLShortener() {
     }
   };
   
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     generateShortUrl();
   };
   
-  // Display notification
   const showNotification = (message, severity) => {
     setNotification({
       open: true,
@@ -162,24 +143,20 @@ export default function URLShortener() {
     });
   };
   
-  // Close notification
   const closeNotification = () => {
     setNotification({ ...notification, open: false });
   };
   
-  // Delete history item
   const deleteHistoryItem = (id) => {
     setUrlHistory(prevHistory => prevHistory.filter(item => item.id !== id));
     showNotification("URL removed from history", "info");
   };
   
-  // Clear all history
   const clearHistory = () => {
     setUrlHistory([]);
     showNotification("History cleared", "info");
   };
   
-  // Simulate URL click/usage
   const trackUrlClick = (id) => {
     setUrlHistory(prevHistory => 
       prevHistory.map(item => 
@@ -188,9 +165,7 @@ export default function URLShortener() {
     );
   };
   
-  // QR code component using SVG for the short URL
   const QRCode = ({ url }) => {
-    // In a production app, use a proper QR code library
     return (
       <Box sx={{ 
         display: 'flex',
@@ -209,7 +184,6 @@ export default function URLShortener() {
           <rect width="150" height="150" fill="#1E1E1E"/>
           <rect x="20" y="20" width="110" height="110" fill="#FFFFFF"/>
           
-          {/* This is a visual placeholder - in a real app, use a QR code generator library */}
           <g fill="#000000">
             <rect x="40" y="40" width="10" height="10"/>
             <rect x="50" y="40" width="10" height="10"/>
@@ -310,7 +284,7 @@ export default function URLShortener() {
               "&.Mui-focused fieldset": { borderColor: "#00A8E8" },
             },
             "& .MuiFormHelperText-root": {
-              color: "#f44336" // Error text color
+              color: "#f44336" 
             }
           }}
         />
@@ -347,7 +321,6 @@ export default function URLShortener() {
         </Box>
       </form>
 
-      {/* Results section */}
       {shortUrl && (
         <Box sx={{ mt: 1 }}>
           <Divider sx={{ my: 2, borderColor: "#333" }} />
@@ -423,7 +396,6 @@ export default function URLShortener() {
         </Box>
       )}
 
-      {/* History section */}
       <Collapse in={showHistory}>
         <Box sx={{ mt: 1 }}>
           <Divider sx={{ my: 2, borderColor: "#333" }} />
@@ -540,7 +512,6 @@ export default function URLShortener() {
         </Box>
       </Collapse>
 
-      {/* Notification */}
       <Snackbar
         open={notification.open}
         autoHideDuration={3000}

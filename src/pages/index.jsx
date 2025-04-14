@@ -27,7 +27,6 @@ import {
 export default function DashboardPage() {
   const theme = useTheme();
   
-  // Feature cards data with updated paths matching your router configuration
   const features = [
     { 
       title: 'Text to Speech', 
@@ -87,7 +86,6 @@ export default function DashboardPage() {
       color: 'white',
       overflow: 'hidden'
     }}>
-      {/* Hero Section */}
       <Box
         sx={{
           pt: 6,
@@ -97,7 +95,6 @@ export default function DashboardPage() {
           overflow: 'hidden'
         }}
       >
-        {/* Abstract background shapes */}
         <Box
           sx={{
             position: 'absolute',
@@ -179,7 +176,6 @@ export default function DashboardPage() {
                   }
                 }}
               >
-                {/* Animated tool cards */}
                 <Box 
                   sx={{ 
                     top: '10%', 
@@ -231,7 +227,6 @@ export default function DashboardPage() {
                   </Box>
                 </Box>
                 
-                {/* Animation keyframes */}
                 <style>
                   {`
                     @keyframes float {
@@ -247,7 +242,6 @@ export default function DashboardPage() {
         </Container>
       </Box>
       
-      {/* Features Section */}
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Typography 
           variant="h4" 
@@ -319,7 +313,6 @@ export default function DashboardPage() {
         </Grid>
       </Container>
       
-      {/* Footer */}
       <Box 
         component="footer"
         sx={{ 

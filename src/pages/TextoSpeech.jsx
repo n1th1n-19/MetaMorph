@@ -25,7 +25,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 export default function TextToSpeech() {
-  // Core state
   const [text, setText] = useState("Hello, this is built-in TTS!");
   const [selectedLanguage, setSelectedLanguage] = useState("en-US");
   const [selectedVoice, setSelectedVoice] = useState("");
@@ -35,22 +34,18 @@ export default function TextToSpeech() {
   const [isPaused, setIsPaused] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
   
-  // Advanced controls
   const [pitch, setPitch] = useState(1);
   const [rate, setRate] = useState(1);
   const [volume, setVolume] = useState(1);
   
-  // Favorites feature
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("tts-favorites");
     return saved ? JSON.parse(saved) : [];
   });
   
-  // References
   const utteranceRef = useRef(null);
   const synthRef = useRef(window.speechSynthesis);
   
-  // Initialize voices
   useEffect(() => {
     const synth = synthRef.current;
     
@@ -60,7 +55,6 @@ export default function TextToSpeech() {
         setVoices(availableVoices);
         
         if (availableVoices.length > 0) {
-          // Find a voice that matches the selected language, or use the first one
           const matchingVoice = availableVoices.find(v => v.lang.startsWith(selectedLanguage));
           setSelectedVoice(matchingVoice ? matchingVoice.name : availableVoices[0].name);
         }
@@ -74,14 +68,12 @@ export default function TextToSpeech() {
       }
     };
 
-    fetchVoices(); // Initial fetch
+    fetchVoices(); 
     
-    // Set up event listener for voices loaded
     if (synth.onvoiceschanged !== undefined) {
       synth.onvoiceschanged = fetchVoices;
     }
     
-    // Clean up
     return () => {
       if (synth.speaking || synth.pending) {
         synth.cancel();
@@ -89,18 +81,15 @@ export default function TextToSpeech() {
     };
   }, []);
   
-  // Filter voices when language changes
   useEffect(() => {
     const matchingVoices = voices.filter(voice => voice.lang.startsWith(selectedLanguage));
     setFilteredVoices(matchingVoices.length > 0 ? matchingVoices : voices);
     
-    // If we have matching voices, select the first one
     if (matchingVoices.length > 0) {
       setSelectedVoice(matchingVoices[0].name);
     }
   }, [selectedLanguage, voices]);
   
-  // Save favorites to localStorage
   useEffect(() => {
     localStorage.setItem("tts-favorites", JSON.stringify(favorites));
   }, [favorites]);
@@ -127,7 +116,6 @@ export default function TextToSpeech() {
         utterance.voice = voice;
       }
       
-      // Add event handlers
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => {
         setIsSpeaking(false);
@@ -159,7 +147,6 @@ export default function TextToSpeech() {
   const handlePlayAudio = () => {
     const synth = synthRef.current;
     
-    // If paused, resume playback
     if (isPaused) {
       try {
         synth.resume();
@@ -170,12 +157,10 @@ export default function TextToSpeech() {
       }
     }
     
-    // If already speaking, cancel current speech
     if (synth.speaking) {
       synth.cancel();
     }
     
-    // Create and start new utterance
     const utterance = createUtterance();
     if (utterance) {
       utteranceRef.current = utterance;
@@ -235,7 +220,6 @@ export default function TextToSpeech() {
     );
     
     if (existingIndex >= 0) {
-      // Remove from favorites
       const newFavorites = [...favorites];
       newFavorites.splice(existingIndex, 1);
       setFavorites(newFavorites);
@@ -245,7 +229,6 @@ export default function TextToSpeech() {
         severity: "info"
       });
     } else {
-      // Add to favorites
       setFavorites([...favorites, currentSettings]);
       setSnackbar({
         open: true,
@@ -280,7 +263,6 @@ export default function TextToSpeech() {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  // Define the list of available languages
   const languages = [
     { code: "en-US", name: "English (US)" },
     { code: "en-GB", name: "English (UK)" },
@@ -397,7 +379,6 @@ export default function TextToSpeech() {
         </FormControl>
       </Box>
       
-      {/* Advanced controls section */}
       <Box sx={{ mt: 2 }}>
         <Typography variant="subtitle1" sx={{ color: "#FFFFFF", mb: 1 }}>
           Advanced Controls
@@ -465,7 +446,6 @@ export default function TextToSpeech() {
         </Box>
       </Box>
 
-      {/* Playback controls */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
         <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title={isSpeaking && !isPaused ? "Pause" : isPaused ? "Resume" : "Play"}>
@@ -514,7 +494,6 @@ export default function TextToSpeech() {
         </Tooltip>
       </Box>
       
-      {/* Favorites section */}
       {favorites.length > 0 && (
         <Box sx={{ mt: 3 }}>
           <Typography variant="subtitle1" sx={{ color: "#FFFFFF", mb: 1 }}>
@@ -558,7 +537,6 @@ export default function TextToSpeech() {
         </Box>
       )}
       
-      {/* Status messages */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
@@ -575,7 +553,6 @@ export default function TextToSpeech() {
         </Alert>
       </Snackbar>
       
-      {/* Browser compatibility notice if needed */}
       {voices.length === 0 && (
         <Alert severity="warning" sx={{ mt: 2 }}>
           No text-to-speech voices detected. TTS may not be supported in your browser.

@@ -28,17 +28,16 @@ import {
 } from '@mui/icons-material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-// Custom theme with blue, green, and red
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2', // blue
+      main: '#1976d2',
     },
     secondary: {
-      main: '#2e7d32', // green
+      main: '#2e7d32', 
     },
     error: {
-      main: '#d32f2f', // red
+      main: '#d32f2f', 
     },
     background: {
       default: '#f5f5f5',
@@ -47,7 +46,6 @@ const theme = createTheme({
   },
 });
 
-// Supported languages for translation
 const languages = [
   { code: 'es', name: 'Spanish' },
   { code: 'fr', name: 'French' },
@@ -73,14 +71,12 @@ export default function SpeechToText() {
   const [showTranslation, setShowTranslation] = useState(false);
   const [translationError, setTranslationError] = useState(false);
   
-  // Check browser support for Speech Recognition
   useEffect(() => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       setBrowserSupport(false);
     }
   }, []);
   
-  // Reset copy success message after 2 seconds
   useEffect(() => {
     if (copySuccess) {
       const timer = setTimeout(() => {
@@ -90,7 +86,6 @@ export default function SpeechToText() {
     }
   }, [copySuccess]);
 
-  // Reset translation when transcript changes
   useEffect(() => {
     if (showTranslation && transcript) {
       setShowTranslation(false);
@@ -164,11 +159,8 @@ export default function SpeechToText() {
     setTranslationError(false);
 
     try {
-      // Simulating API call to translation service
-      // In a real application, you would use a service like Google Translate API
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock translation (in a real app, replace with actual API call)
       const mockTranslatedText = `[Translated to ${languages.find(lang => lang.code === targetLanguage).name}]: ${transcript}`;
       setTranslatedText(mockTranslatedText);
       setShowTranslation(true);

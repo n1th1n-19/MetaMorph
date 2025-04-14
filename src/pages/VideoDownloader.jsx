@@ -34,7 +34,6 @@ import {
   Instagram 
 } from "@mui/icons-material";
 
-// API URL from environment variable with fallback
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 export default function VideoDownloader() {
@@ -50,7 +49,6 @@ export default function VideoDownloader() {
   const [showHistory, setShowHistory] = useState(false);
   const [activePlatform, setActivePlatform] = useState(0);
 
-  // Platform definitions
   const platforms = [
     { name: "YouTube", icon: <YouTube />, placeholder: "https://www.youtube.com/watch?v=...", regex: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/ },
     { name: "Twitter", icon: <Twitter />, placeholder: "https://twitter.com/username/status/...", regex: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/.+$/ },
@@ -58,7 +56,6 @@ export default function VideoDownloader() {
     { name: "Facebook", icon: <Facebook />, placeholder: "https://www.facebook.com/watch?v=...", regex: /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.com)\/.+$/ }
   ];
 
-  // Load recent downloads from localStorage on mount
   useEffect(() => {
     const savedDownloads = localStorage.getItem("recentDownloads");
     if (savedDownloads) {
@@ -70,12 +67,10 @@ export default function VideoDownloader() {
     }
   }, []);
 
-  // URL validation based on active platform
   const isValidUrl = (url) => {
     return platforms[activePlatform].regex.test(url);
   };
 
-  // Handle platform tab change
   const handlePlatformChange = (event, newValue) => {
     setActivePlatform(newValue);
     setVideoUrl("");
@@ -83,13 +78,10 @@ export default function VideoDownloader() {
     setError("");
   };
 
-  // Fetch video information
   const fetchVideoInfo = async () => {
-    // Reset states
     setError("");
     setVideoInfo(null);
     
-    // Validate URL client-side
     if (!videoUrl) {
       setError("Please enter a video URL.");
       return;
@@ -106,7 +98,6 @@ export default function VideoDownloader() {
       const response = await axios.get(`${API_URL}/info?url=${encodeURIComponent(videoUrl)}`);
       setVideoInfo(response.data);
       
-      // Auto-select the highest quality format
       if (response.data.formats.length > 0) {
         setSelectedFormat(response.data.formats[0].formatId);
       }
@@ -118,28 +109,23 @@ export default function VideoDownloader() {
     }
   };
 
-  // Handle URL input change
   const handleUrlChange = (e) => {
     const newUrl = e.target.value;
     setVideoUrl(newUrl);
     
-    // Clear video info if URL field is cleared
     if (!newUrl) {
       setVideoInfo(null);
     }
   };
 
-  // When URL field loses focus, try to fetch info if it's valid
   const handleUrlBlur = () => {
     if (videoUrl && isValidUrl(videoUrl) && !videoInfo) {
       fetchVideoInfo();
     }
   };
 
-  // Handle API errors with proper messages
   const handleApiError = (error, defaultMessage) => {
     if (error.response) {
-      // Server responded with an error status
       if (error.response.status === 400) {
         setError(error.response.data.error || "Invalid video URL or format.");
       } else if (error.response.status === 429) {
@@ -148,21 +134,16 @@ export default function VideoDownloader() {
         setError(`Server error: ${error.response.data.error || error.response.status}`);
       }
     } else if (error.request) {
-      // Request made but no response received
       setError("No response from server. Please check your connection.");
     } else {
-      // Error setting up the request
       setError(`Error: ${error.message || defaultMessage}`);
     }
   };
 
-  // Download video function
   const downloadVideo = async () => {
-    // Reset states
     setError("");
     setSuccess(false);
     
-    // Validate URL client-side
     if (!videoUrl) {
       setError("Please enter a video URL.");
       return;
@@ -177,7 +158,6 @@ export default function VideoDownloader() {
     setProgress(0);
 
     try {
-      // Build the download URL with format if selected
       let downloadUrl = `${API_URL}/download?url=${encodeURIComponent(videoUrl)}`;
       if (selectedFormat) {
         downloadUrl += `&format=${selectedFormat}`;
@@ -193,17 +173,14 @@ export default function VideoDownloader() {
         },
       });
 
-      // Check if response is the expected video type
       const contentType = response.headers["content-type"];
       if (!contentType || !contentType.includes("video")) {
         throw new Error("Invalid response format. Expected video file.");
       }
 
-      // Create download link
       const blob = new Blob([response.data], { type: contentType });
       const link = document.createElement("a");
       
-      // Get filename from Content-Disposition header if available
       let filename = `${platforms[activePlatform].name.toLowerCase()}-video.mp4`;
       const disposition = response.headers["content-disposition"];
       if (disposition && disposition.includes("filename=")) {
@@ -218,12 +195,10 @@ export default function VideoDownloader() {
       link.download = filename;
       link.click();
       
-      // Clean up the URL object after download
       setTimeout(() => URL.revokeObjectURL(link.href), 100);
       
       setSuccess(true);
       
-      // Save to recent downloads
       if (videoInfo) {
         const newDownload = {
           id: videoInfo.id,
@@ -258,7 +233,6 @@ export default function VideoDownloader() {
   };
 
   const downloadFromHistory = (url) => {
-    // Determine which platform the URL belongs to
     for (let i = 0; i < platforms.length; i++) {
       if (platforms[i].regex.test(url)) {
         setActivePlatform(i);
@@ -271,7 +245,6 @@ export default function VideoDownloader() {
     setShowHistory(false);
   };
 
-  // Format file size to human-readable format
   const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -280,7 +253,6 @@ export default function VideoDownloader() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  // Get the appropriate platform icon
   const getPlatformIcon = (platform) => {
     switch (platform) {
       case 'youtube': return <YouTube fontSize="small" sx={{ color: "#FF0000" }} />;
@@ -325,7 +297,6 @@ export default function VideoDownloader() {
         </Box>
       </Box>
       
-      {/* Platform Selection Tabs */}
       <Tabs
         value={activePlatform}
         onChange={handlePlatformChange}
@@ -567,14 +538,12 @@ export default function VideoDownloader() {
         Note: This tool is for personal use only. Please respect copyright laws and platform Terms of Service.
       </Typography>
 
-      {/* Error Snackbar */}
       <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
       </Snackbar>
       
-      {/* Success Snackbar */}
       <Snackbar open={success} autoHideDuration={3000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           Video downloaded successfully!
