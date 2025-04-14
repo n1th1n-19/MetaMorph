@@ -25,11 +25,11 @@ const NAVIGATION = [
     title: 'Text to Speech',
     icon: <CampaignIcon />,
   },
-  // {
-  //   segment: 'speech-to-text',
-  //   title: 'Speech to Text',
-  //   icon: <CampaignIcon />,
-  // },
+  {
+    segment: 'speech-to-text',
+    title: 'Speech to Text',
+    icon: <CampaignIcon />,
+  },
   {
     segment: 'qr-code',
     title: 'QR Code',

@@ -18,10 +18,21 @@ import {
   CardMedia,
   Divider,
   Tooltip,
-  IconButton
+  IconButton,
+  Tab,
+  Tabs
 } from "@mui/material";
 import axios from "axios";
-import { FileDownload, Info, History, Settings, Delete } from "@mui/icons-material";
+import { 
+  FileDownload, 
+  Info, 
+  History, 
+  Delete, 
+  YouTube, 
+  Twitter, 
+  Facebook, 
+  Instagram 
+} from "@mui/icons-material";
 
 // API URL from environment variable with fallback
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
@@ -37,6 +48,15 @@ export default function VideoDownloader() {
   const [success, setSuccess] = useState(false);
   const [recentDownloads, setRecentDownloads] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  const [activePlatform, setActivePlatform] = useState(0);
+
+  // Platform definitions
+  const platforms = [
+    { name: "YouTube", icon: <YouTube />, placeholder: "https://www.youtube.com/watch?v=...", regex: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/ },
+    { name: "Twitter", icon: <Twitter />, placeholder: "https://twitter.com/username/status/...", regex: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/.+$/ },
+    { name: "Instagram", icon: <Instagram />, placeholder: "https://www.instagram.com/p/...", regex: /^(https?:\/\/)?(www\.)?(instagram\.com)\/.+$/ },
+    { name: "Facebook", icon: <Facebook />, placeholder: "https://www.facebook.com/watch?v=...", regex: /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.com)\/.+$/ }
+  ];
 
   // Load recent downloads from localStorage on mount
   useEffect(() => {
@@ -50,10 +70,17 @@ export default function VideoDownloader() {
     }
   }, []);
 
-  // Basic YouTube URL validation
-  const isValidYouTubeUrl = (url) => {
-    const regex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-    return regex.test(url);
+  // URL validation based on active platform
+  const isValidUrl = (url) => {
+    return platforms[activePlatform].regex.test(url);
+  };
+
+  // Handle platform tab change
+  const handlePlatformChange = (event, newValue) => {
+    setActivePlatform(newValue);
+    setVideoUrl("");
+    setVideoInfo(null);
+    setError("");
   };
 
   // Fetch video information
@@ -68,8 +95,8 @@ export default function VideoDownloader() {
       return;
     }
 
-    if (!isValidYouTubeUrl(videoUrl)) {
-      setError("Please enter a valid YouTube URL.");
+    if (!isValidUrl(videoUrl)) {
+      setError(`Please enter a valid ${platforms[activePlatform].name} URL.`);
       return;
     }
 
@@ -91,7 +118,7 @@ export default function VideoDownloader() {
     }
   };
 
-  // Handle URL input change with debounce for auto-fetch
+  // Handle URL input change
   const handleUrlChange = (e) => {
     const newUrl = e.target.value;
     setVideoUrl(newUrl);
@@ -104,7 +131,7 @@ export default function VideoDownloader() {
 
   // When URL field loses focus, try to fetch info if it's valid
   const handleUrlBlur = () => {
-    if (videoUrl && isValidYouTubeUrl(videoUrl) && !videoInfo) {
+    if (videoUrl && isValidUrl(videoUrl) && !videoInfo) {
       fetchVideoInfo();
     }
   };
@@ -141,8 +168,8 @@ export default function VideoDownloader() {
       return;
     }
 
-    if (!isValidYouTubeUrl(videoUrl)) {
-      setError("Please enter a valid YouTube URL.");
+    if (!isValidUrl(videoUrl)) {
+      setError(`Please enter a valid ${platforms[activePlatform].name} URL.`);
       return;
     }
 
@@ -177,7 +204,7 @@ export default function VideoDownloader() {
       const link = document.createElement("a");
       
       // Get filename from Content-Disposition header if available
-      let filename = "downloaded-video.mp4";
+      let filename = `${platforms[activePlatform].name.toLowerCase()}-video.mp4`;
       const disposition = response.headers["content-disposition"];
       if (disposition && disposition.includes("filename=")) {
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
@@ -204,6 +231,7 @@ export default function VideoDownloader() {
           thumbnail: videoInfo.thumbnail,
           url: videoUrl,
           downloadedAt: new Date().toISOString(),
+          platform: videoInfo.platform || platforms[activePlatform].name.toLowerCase()
         };
         
         const updatedDownloads = [newDownload, ...recentDownloads.slice(0, 4)];
@@ -230,6 +258,14 @@ export default function VideoDownloader() {
   };
 
   const downloadFromHistory = (url) => {
+    // Determine which platform the URL belongs to
+    for (let i = 0; i < platforms.length; i++) {
+      if (platforms[i].regex.test(url)) {
+        setActivePlatform(i);
+        break;
+      }
+    }
+    
     setVideoUrl(url);
     fetchVideoInfo();
     setShowHistory(false);
@@ -242,6 +278,17 @@ export default function VideoDownloader() {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // Get the appropriate platform icon
+  const getPlatformIcon = (platform) => {
+    switch (platform) {
+      case 'youtube': return <YouTube fontSize="small" sx={{ color: "#FF0000" }} />;
+      case 'twitter': return <Twitter fontSize="small" sx={{ color: "#1DA1F2" }} />;
+      case 'instagram': return <Instagram fontSize="small" sx={{ color: "#E1306C" }} />;
+      case 'facebook': return <Facebook fontSize="small" sx={{ color: "#4267B2" }} />;
+      default: return <Info fontSize="small" />;
+    }
   };
 
   return (
@@ -263,7 +310,7 @@ export default function VideoDownloader() {
     >
       <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h4" fontWeight="bold" color="#00A8E8">
-          YouTube Downloader
+          Video Downloader
         </Typography>
         
         <Box>
@@ -277,6 +324,36 @@ export default function VideoDownloader() {
           </Tooltip>
         </Box>
       </Box>
+      
+      {/* Platform Selection Tabs */}
+      <Tabs
+        value={activePlatform}
+        onChange={handlePlatformChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{ 
+          width: "100%", 
+          borderBottom: 1, 
+          borderColor: "#333",
+          "& .MuiTabs-indicator": { backgroundColor: "#00A8E8" },
+          "& .Mui-selected": { color: "#00A8E8" },
+          "& .MuiTab-root": { color: "#888" }
+        }}
+      >
+        {platforms.map((platform, index) => (
+          <Tab 
+            key={index}
+            icon={platform.icon} 
+            label={platform.name}
+            sx={{ 
+              minWidth: "auto",
+              textTransform: "none",
+              fontWeight: "bold",
+              fontSize: "0.9rem"
+            }} 
+          />
+        ))}
+      </Tabs>
       
       {showHistory && recentDownloads.length > 0 && (
         <Box sx={{ width: "100%" }}>
@@ -311,10 +388,13 @@ export default function VideoDownloader() {
                     image={item.thumbnail || "/placeholder-thumbnail.jpg"}
                     alt={item.title}
                   />
-                  <Box sx={{ p: 1, overflow: "hidden" }}>
-                    <Typography noWrap variant="body2" color="#fff">
-                      {item.title}
-                    </Typography>
+                  <Box sx={{ p: 1, overflow: "hidden", flexGrow: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                      {getPlatformIcon(item.platform)}
+                      <Typography noWrap variant="body2" color="#fff">
+                        {item.title}
+                      </Typography>
+                    </Box>
                     <Typography variant="caption" color="#888">
                       {new Date(item.downloadedAt).toLocaleDateString()}
                     </Typography>
@@ -329,20 +409,20 @@ export default function VideoDownloader() {
 
       <Box sx={{ width: "100%" }}>
         <TextField
-          label="YouTube URL"
+          label={`${platforms[activePlatform].name} URL`}
           variant="outlined"
           fullWidth
           value={videoUrl}
           onChange={handleUrlChange}
           onBlur={handleUrlBlur}
-          placeholder="https://www.youtube.com/watch?v=..."
+          placeholder={platforms[activePlatform].placeholder}
           error={Boolean(error && !loading)}
           disabled={loading}
           InputProps={{
             endAdornment: videoUrl && (
               <IconButton
                 onClick={fetchVideoInfo}
-                disabled={infoLoading || !isValidYouTubeUrl(videoUrl)}
+                disabled={infoLoading || !isValidUrl(videoUrl)}
                 size="small"
                 sx={{ color: infoLoading ? "#888" : "#00A8E8" }}
               >
@@ -381,24 +461,29 @@ export default function VideoDownloader() {
             <Grid item xs={12} sm={4}>
               <CardMedia
                 component="img"
-                image={videoInfo.thumbnail}
+                image={videoInfo.thumbnail || "/placeholder-thumbnail.jpg"}
                 alt={videoInfo.title}
                 sx={{ aspectRatio: "16/9", objectFit: "cover" }}
               />
             </Grid>
             <Grid item xs={12} sm={8}>
               <Box sx={{ p: 2 }}>
-                <Typography variant="h6" fontWeight="bold" noWrap>
-                  {videoInfo.title}
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                  {getPlatformIcon(videoInfo.platform || platforms[activePlatform].name.toLowerCase())}
+                  <Typography variant="h6" fontWeight="bold" noWrap>
+                    {videoInfo.title}
+                  </Typography>
+                </Box>
                 
                 <Typography variant="body2" color="#bbb" sx={{ mt: 1, mb: 2, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                   {videoInfo.description || "No description available"}
                 </Typography>
                 
-                <Typography variant="body2" color="#888" sx={{ mb: 2 }}>
-                  Duration: {Math.floor(videoInfo.duration / 60)}:{(videoInfo.duration % 60).toString().padStart(2, '0')}
-                </Typography>
+                {videoInfo.duration > 0 && (
+                  <Typography variant="body2" color="#888" sx={{ mb: 2 }}>
+                    Duration: {Math.floor(videoInfo.duration / 60)}:{(videoInfo.duration % 60).toString().padStart(2, '0')}
+                  </Typography>
+                )}
                 
                 <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
                   <InputLabel id="format-select-label" sx={{ color: "#888" }}>Quality</InputLabel>
@@ -417,7 +502,7 @@ export default function VideoDownloader() {
                   >
                     {videoInfo.formats.map((format) => (
                       <MenuItem key={format.formatId} value={format.formatId}>
-                        {format.qualityLabel || format.resolution} - {formatFileSize(format.filesize)}
+                        {format.qualityLabel || format.resolution} {format.filesize > 0 ? `- ${formatFileSize(format.filesize)}` : ''}
                       </MenuItem>
                     ))}
                   </Select>
@@ -449,7 +534,7 @@ export default function VideoDownloader() {
             <Typography>Downloading...</Typography>
           </Box>
         ) : (
-          "Download Video"
+          `Download ${platforms[activePlatform].name} Video`
         )}
       </Button>
 
@@ -479,7 +564,7 @@ export default function VideoDownloader() {
       )}
       
       <Typography variant="caption" color="#777" textAlign="center" mt={1}>
-        Note: This tool is for personal use only. Please respect copyright laws and YouTube's Terms of Service.
+        Note: This tool is for personal use only. Please respect copyright laws and platform Terms of Service.
       </Typography>
 
       {/* Error Snackbar */}
