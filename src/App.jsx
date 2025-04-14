@@ -8,6 +8,7 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LinkIcon from "@mui/icons-material/Link";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import DownloadIcon from '@mui/icons-material/Download';
+import MicIcon from '@mui/icons-material/Mic';
 
 
 import theme from '../theme';
@@ -29,7 +30,7 @@ const NAVIGATION = [
   {
     segment: 'speech-to-text',
     title: 'Speech to Text',
-    icon: <CampaignIcon />,
+    icon: <MicIcon />,
   },
   {
     segment: 'qr-code',
