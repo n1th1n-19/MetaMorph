@@ -7,6 +7,7 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LinkIcon from "@mui/icons-material/Link";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
+import DownloadIcon from '@mui/icons-material/Download';
 
 
 import theme from '../theme';
@@ -53,7 +54,7 @@ const NAVIGATION = [
   {
     segment: 'video-downloader',
     title: 'Video Downloader',
-    icon: <TextFieldsIcon />,
+    icon: <DownloadIcon />,
   },
 ];
 
