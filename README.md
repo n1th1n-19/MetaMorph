@@ -27,7 +27,7 @@ The application features a dedicated backend service for the video downloader co
 
 Transform, convert, and enhance your digital content all in one place, without switching between different apps or services.
 
-## ✨ <h2 id="features">Features</h2>
+## <h2 id="features">Features</h2>
 
 | Tool | Description |
 |------|-------------|
