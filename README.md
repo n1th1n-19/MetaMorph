@@ -1,4 +1,4 @@
-# 🔄 MetaMorph
+# MetaMorph
 
 <p align="center">
   <img src="src/assets/logooo.png" alt="MetaMorph Logo" width="150" height="150">
@@ -163,4 +163,4 @@ Please make sure to update tests as appropriate and follow the code style guidel
 
 ---
 
-**Happy Morphing!** 🔄
+**Happy Morphing!** 
