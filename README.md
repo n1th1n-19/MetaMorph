@@ -1,113 +1,148 @@
-# MetaMorph
+# 🔄 MetaMorph
 
-![MetaMorph Logo](https://via.placeholder.com/150?text=MetaMorph)
+<p align="center">
+  <img src="https://via.placeholder.com/150" alt="MetaMorph Logo" width="150" height="150">
+</p>
 
-## All-in-One Digital Toolbox
+<p align="center">
+  <strong>One app, endless transformations</strong>
+</p>
 
-MetaMorph is a comprehensive web application that offers multiple utility tools to simplify your digital workflow. Convert, create, extract, and more — all in one convenient platform.
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#demo">Demo</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#project-structure">Project Structure</a> •
+  <a href="#roadmap">Roadmap</a> •
+  <a href="#contributing">Contributing</a> •
+  <a href="#license">License</a>
+</p>
 
-## Features
+## 📋 Overview
 
-MetaMorph provides the following tools:
+MetaMorph is a lightweight, modular, multi-utility web application built with React and Node.js. It offers a suite of powerful tools ranging from file conversion and speech recognition to QR code generation and video downloading — all packed into a single seamless interface.
 
-- **Text to Speech:** Convert any text into natural-sounding speech in multiple languages.
-- **Speech to Text:** Accurately transcribe audio into text with our advanced recognition engine.
-- **QR Code Generator:** Generate custom QR codes for websites, text, and contact information.
-- **File Converter:** Convert files between different formats easily and quickly.
-- **URL Shortener:** Create compact, shareable links for your long URLs.
-- **OCR Extractor:** Extract text from images and scanned documents with high accuracy.
-- **Video Downloader:** Download videos from YouTube, Twitter, Instagram, and Facebook.
+The application features a dedicated backend service for the video downloader component, allowing for efficient handling of video downloads from various sources.
 
-## Technology Stack
+Transform, convert, and enhance your digital content all in one place, without switching between different apps or services.
 
-- React
-- Material UI
-- React Router
-- @toolpad/core (for layout and navigation)
+## ✨ Features
 
-## Installation
+| Tool | Description |
+|------|-------------|
+| 📄 **File Converter** | Convert files between different formats |
+| 👁️ **OCR Extractor** | Extract text from images using Optical Character Recognition |
+| 📱 **QR Code Generator** | Generate QR codes from text or URLs |
+| 🎙️ **Speech to Text** | Offline speech recognition using Vosk |
+| 🔊 **Text to Speech** | Convert written text into speech |
+| 🔗 **URL Shortener** | Shrink long links into short ones |
+| 📹 **Video Downloader** | Download videos from various sources |
+| 🖼️ **ASCII Text Generator** | Turn text into ASCII art |
 
-1. Clone the repository:
+## 🎮 Demo
 
-```bash
-git clone https://github.com/yourusername/metamorph.git
-cd metamorph
+Check out the live demo: [MetaMorph Demo](https://your-demo-link.com)
+
+![MetaMorph Screenshot](https://via.placeholder.com/800x400)
+
+## 🚀 Installation
+
+### Prerequisites
+- Node.js (v14.0 or higher)
+- npm (v6.0 or higher)
+
+### Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/metamorph.git
+   cd metamorph
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server:**
+   ```bash
+   # Start frontend
+   npm run dev
+   
+   # Start backend (in a separate terminal)
+   cd backend
+   npm install
+   
+   # Create a .env file in the backend directory with the following variables:
+   # PORT=5000
+   # API_KEY=your_api_key_here
+   # DOWNLOAD_PATH=./downloads
+   
+   node server.js
+   ```
+
+4. **Open the app:**
+   Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+
+
+
+## 🔧 Tech Stack
+
+- **Frontend:** React 18 with JSX, CSS
+- **Backend:** Node.js for the video downloader service
+- **Layout System:** Custom dashboard layout with modular components
+- **Libraries:**
+  - Browser-native APIs (File APIs, Canvas, Web Speech API)
+
+## 📁 Project Structure
+
 ```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Start the development server:
-
-```bash
-npm run dev
-```
-
-4. Build for production:
-
-```bash
-npm run build
-```
-
-## Project Structure
-
-```
-metamorph/
+MetaMorph/
 ├── public/
-│   ├── index.html
-│   └── assets/
+├── backend/
+│   ├── .gitignore
+│   ├── package-lock.json
+│   ├── package.json
+│   └── server.js
 ├── src/
-│   ├── App.jsx                  # Main application component
-│   ├── main.jsx                 # Entry point
-│   ├── theme.js                 # Theme configuration
+│   ├── assets/
+│   ├── Components/
+│   │   ├── AsciiText.jsx
+│   │   ├── Aurora.jsx
+│   │   └── Aurora.css
+│   ├── CSS/
+│   │   └── qrcode.css
 │   ├── layouts/
-│   │   └── dashboard.jsx        # Dashboard layout with navigation
-│   └── pages/
-│       ├── index.jsx            # Homepage
-│       ├── QRCode.jsx           # QR code generator
-│       ├── TextoSpeech.jsx      # Text to speech converter
-│       ├── SpeechToText.jsx     # Speech to text converter
-│       ├── FileConverter.jsx    # File format converter
-│       ├── URLShortener.jsx     # URL shortener
-│       ├── OCRExtractor.jsx     # OCR text extractor
-│       └── VideoDownloader.jsx  # Video downloader
-└── package.json
+│   │   ├── SplashCurser.jsx
+│   │   └── dashboard.jsx
+│   ├── pages/
+│   │   ├── FileConverter.jsx
+│   │   ├── OCRExtractor.jsx
+│   │   ├── QRCode.jsx
+│   │   ├── SpeechToText.jsx
+│   │   ├── TextoSpeech.jsx
+│   │   ├── URLShortener.jsx
+│   │   ├── VideoDownloader.jsx
+│   │   ├── index.jsx
+│   │   └── orders.jsx
+│   ├── App.jsx
+│   └── main.jsx
 ```
 
-## Router Configuration
+## 🗺️ Roadmap
 
-The application uses React Router for navigation with the following routes:
+- [ ] Dark mode and theme toggler
+- [ ] Drag-and-drop file support
+- [ ] Offline mode/PWA support
+- [ ] More export options (PDF, JSON, CSV)
+- [ ] Multi-language support
+- [ ] User accounts and saved transformations
+- [ ] Batch processing capabilities
 
-- `/` - Dashboard/Home page
-- `/qr-code` - QR Code Generator
-- `/to-speech` - Text to Speech Converter
-- `/speech-to-text` - Speech to Text Converter
-- `/file-converter` - File Format Converter
-- `/url-shortener` - URL Shortener
-- `/ocr-extractor` - OCR Text Extractor
-- `/video-downloader` - Video Downloader
+## 🤝 Contributing
 
-## Development
-
-### Adding a New Tool
-
-To add a new tool to MetaMorph:
-
-1. Create a new component in the `pages` directory.
-2. Add the route to the router configuration in `main.jsx`.
-3. Add the tool to the navigation items in `layouts/dashboard.jsx`.
-4. Add the tool card to the homepage in `pages/index.jsx`.
-
-### Customizing the Theme
-
-The application uses a custom theme defined in `theme.js`. You can modify this file to change colors, typography, and other design elements across the application.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Here's how you can help:
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -115,15 +150,28 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+Please make sure to update tests as appropriate and follow the code style guidelines.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 📄 License
 
-## Acknowledgments
-
-- Icons provided by Material UI
-- UI components built with Material UI
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-© 2025 MetaMorph. All tools are free for personal use.
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/your-username">Your Name</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/your-username">GitHub</a> •
+  <a href="https://twitter.com/your-twitter">Twitter</a> •
+  <a href="https://your-website.com">Website</a>
+</p>
+
+## 🙏 Acknowledgements
+
+- All open-source contributors who made this project possible
+
+---
+
+**Happy Morphing!** 🔄
