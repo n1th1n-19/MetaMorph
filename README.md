@@ -16,7 +16,6 @@
   <a href="#project-structure">Project Structure</a> •
   <a href="#roadmap">Roadmap</a> •
   <a href="#contributing">Contributing</a> •
-  <a href="#license">License</a>
 </p>
 
 ## 📋 Overview
@@ -40,13 +39,13 @@ Transform, convert, and enhance your digital content all in one place, without s
 | 📹 **Video Downloader** | Download videos from various sources |
 | 🖼️ **ASCII Text Generator** | Turn text into ASCII art |
 
-## 🎮 Demo
+## <h2 id="demo">Demo</h2>
 
 Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 
 <!-- ![MetaMorph Screenshot](https://via.placeholder.com/800x400) -->
 
-## 🚀 Installation
+## <h2 id="installation">Installation</h2>
 
 ### Prerequisites
 - Node.js (v14.0 or higher)
@@ -82,7 +81,7 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 
 
 
-## 🔧 Tech Stack
+## <h2 id="tech-stack">Tech Stack</h2>
 
 - **Frontend:** React 18 with JSX, CSS
 - **Backend:** Node.js for the video downloader service
@@ -90,7 +89,7 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 - **Libraries:**
   - Browser-native APIs (File APIs, Canvas, Web Speech API)
 
-## 📁 Project Structure
+## <h2 id="project-structure">Project Structure</h2>
 
 ```
 MetaMorph/
@@ -124,7 +123,7 @@ MetaMorph/
 │   └── main.jsx
 ```
 
-## 🗺️ Roadmap
+## <h2 id="roadmap">Roadmap</h2>
 
 - [ ] Dark mode and theme toggler
 - [ ] Drag-and-drop file support
@@ -134,7 +133,7 @@ MetaMorph/
 - [ ] User accounts and saved transformations
 - [ ] Batch processing capabilities
 
-## 🤝 Contributing
+## <h2 id="contributing">Contribution</h2>
 
 Contributions are welcome! Here's how you can help:
 
