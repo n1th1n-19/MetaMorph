@@ -42,9 +42,9 @@ Transform, convert, and enhance your digital content all in one place, without s
 
 ## 🎮 Demo
 
-Check out the live demo: [MetaMorph Demo](https://your-demo-link.com)
+Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 
-![MetaMorph Screenshot](https://via.placeholder.com/800x400)
+<!-- ![MetaMorph Screenshot](https://via.placeholder.com/800x400) -->
 
 ## 🚀 Installation
 
@@ -56,8 +56,8 @@ Check out the live demo: [MetaMorph Demo](https://your-demo-link.com)
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/metamorph.git
-   cd metamorph
+   git clone https://github.com/n1th1n-19/cap.git
+   cd cap
    ```
 
 2. **Install dependencies:**
@@ -152,18 +152,13 @@ Contributions are welcome! Here's how you can help:
 
 Please make sure to update tests as appropriate and follow the code style guidelines.
 
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/your-username">Your Name</a>
+  Made with ❤️ by <a href="https://github.com/n1th1n-19">nthnpy3</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/your-username">GitHub</a> •
+  <a href="https://github.com/n1th1n-19">GitHub</a> •
   <a href="https://twitter.com/your-twitter">Twitter</a> •
   <a href="https://your-website.com">Website</a>
 </p>
