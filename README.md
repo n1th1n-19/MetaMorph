@@ -73,12 +73,7 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
    # Start backend (in a separate terminal)
    cd backend
    npm install
-   
-   <!-- # Create a .env file in the backend directory with the following variables: -->
-   <!-- # PORT=5000
-   <!-- # API_KEY=your_api_key_here -->
-   <!-- # DOWNLOAD_PATH=./downloads -->
-    -->
+  
    node server.js
    ```
 
