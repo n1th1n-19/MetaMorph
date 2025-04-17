@@ -56,6 +56,11 @@ const NAVIGATION = [
     title: 'Video Downloader',
     icon: <DownloadIcon />,
   },
+  {
+    segment: 'mp4-to-mp3',
+    title: 'Mp4 to Mp3',
+    icon: <DownloadIcon />,
+  },
 ];
 
 const BRANDING = {
