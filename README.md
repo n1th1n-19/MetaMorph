@@ -1,7 +1,7 @@
 # MetaMorph
 
 <p align="center">
-  <video src="src/assets/logooo.gif" alt="MetaMorph Logo" width="150" height="150">
+  <img src="src/assets/logooo.gif" alt="MetaMorph Logo" width="150" height="150">
 </p>
 
 <p align="center">
