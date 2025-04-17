@@ -5,11 +5,10 @@ import { Outlet } from 'react-router-dom';
 import { ReactRouterAppProvider } from '@toolpad/core/react-router';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import LinkIcon from "@mui/icons-material/Link";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
+import LinkIcon from '@mui/icons-material/Link';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
 import DownloadIcon from '@mui/icons-material/Download';
 import MicIcon from '@mui/icons-material/Mic';
-
 
 import theme from '../theme';
 
@@ -60,14 +59,18 @@ const NAVIGATION = [
 ];
 
 const BRANDING = {
-  title: "MetaMorph",
-  logo: '',
+  title: 'MetaMorph',
+  logo: '', 
   homeUrl: '/',
 };
 
 export default function App() {
   return (
-    <ReactRouterAppProvider navigation={NAVIGATION} branding={BRANDING} theme={theme}>
+    <ReactRouterAppProvider
+      navigation={NAVIGATION}
+      branding={BRANDING}
+      theme={theme}
+    >
       <Outlet />
     </ReactRouterAppProvider>
   );
