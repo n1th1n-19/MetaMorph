@@ -51,11 +51,11 @@ const NAVIGATION = [
     title: 'OCR Extractor',
     icon: <TextFieldsIcon />,
   },
-  {
-    segment: 'video-downloader',
-    title: 'Video Downloader',
-    icon: <DownloadIcon />,
-  },
+  // {
+  //   segment: 'video-downloader',
+  //   title: 'Video Downloader',
+  //   icon: <DownloadIcon />,
+  // },
   {
     segment: 'mp4-to-mp3',
     title: 'Mp4 to Mp3',
