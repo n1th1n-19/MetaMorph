@@ -42,12 +42,19 @@ export default function DashboardPage() {
       color: '#2196F3',
       link: '/speech-to-text'
     },
-    { 
-      title: 'Video Downloader', 
-      description: 'Download videos from YouTube, Twitter, Instagram, and Facebook',
+    // { 
+    //   title: 'Video Downloader', 
+    //   description: 'Download videos from YouTube, Twitter, Instagram, and Facebook',
+    //   icon: <FileDownload fontSize="large" />,
+    //   color: '#E91E63',
+    //   link: '/video-downloader'
+    // },
+     { 
+      title: 'Mp4 to Mp3 converter', 
+      description: 'Converts Mp4 format files to Mp3 format',
       icon: <FileDownload fontSize="large" />,
       color: '#E91E63',
-      link: '/video-downloader'
+      link: '/mp4-to-mp3'
     },
     { 
       title: 'URL Shortener', 
