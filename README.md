@@ -37,7 +37,6 @@ Transform, convert, and enhance your digital content all in one place, without s
 | 🔊 **Text to Speech** | Convert written text into speech |
 | 🔗 **URL Shortener** | Shrink long links into short ones |
 | 📹 **Video Downloader** | Download videos from various sources |
-| 🖼️ **ASCII Text Generator** | Turn text into ASCII art |
 
 ## <h2 id="demo">Demo</h2>
 
