@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-// MUI Components
+
 import { 
   Box, 
   Button, 
@@ -9,7 +9,7 @@ import {
   Alert,
   CircularProgress
 } from '@mui/material';
-// MUI Icons
+
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DownloadIcon from '@mui/icons-material/Download';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -25,14 +25,14 @@ const DownloadMP3 = () => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Check if file is an MP4
+
     if (!file.type.includes('video/mp4')) {
       setErrorMessage('Please select an MP4 file.');
       return;
     }
 
     setErrorMessage('');
-    // Extract the file name without extension to use for the MP3
+  
     const baseName = file.name.replace(/\.[^/.]+$/, '');
     setFileName(baseName);
     
@@ -44,40 +44,40 @@ const DownloadMP3 = () => {
     setMp3Url(null);
     
     try {
-      // Create an audio context
+     
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       
-      // Convert the file to an array buffer
+     
       const arrayBuffer = await file.arrayBuffer();
       
-      // Decode the audio from the MP4 file
+     
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
       
-      // Get the audio data
+
       const numberOfChannels = audioBuffer.numberOfChannels;
       const length = audioBuffer.length;
       const sampleRate = audioBuffer.sampleRate;
       
-      // Create a buffer to process the audio
+  
       const offlineAudioContext = new OfflineAudioContext(
         numberOfChannels,
         length,
         sampleRate
       );
       
-      // Create a buffer source
+  
       const source = offlineAudioContext.createBufferSource();
       source.buffer = audioBuffer;
       source.connect(offlineAudioContext.destination);
       source.start();
       
-      // Render the audio
+
       const renderedBuffer = await offlineAudioContext.startRendering();
       
-      // Convert to WAV format (which we can then convert to MP3)
+   
       const wavBlob = audioBufferToWav(renderedBuffer);
       
-      // Create a URL for the WAV blob
+
       const url = URL.createObjectURL(wavBlob);
       setMp3Url(url);
     } catch (error) {
@@ -93,15 +93,14 @@ const DownloadMP3 = () => {
     const sampleRate = buffer.sampleRate;
     const length = buffer.length;
     
-    // Create the WAV file
+
     const wav = new WavAudioEncoder(sampleRate, numberOfChannels);
     
-    // Add the audio data
+  
     for (let channel = 0; channel < numberOfChannels; channel++) {
       wav.addChannel(buffer.getChannelData(channel));
     }
     
-    // Get the WAV file as a Blob
     return wav.finish();
   };
 
@@ -127,7 +126,7 @@ const DownloadMP3 = () => {
     
     const file = e.dataTransfer.files[0];
     if (file && file.type.includes('video/mp4')) {
-      // Extract the file name without extension to use for the MP3
+
       const baseName = file.name.replace(/\.[^/.]+$/, '');
       setFileName(baseName);
       setErrorMessage('');
@@ -241,7 +240,7 @@ const DownloadMP3 = () => {
   );
 };
 
-// Simple WAV encoder implementation
+
 class WavAudioEncoder {
   constructor(sampleRate, numChannels) {
     this.sampleRate = sampleRate;
@@ -252,15 +251,15 @@ class WavAudioEncoder {
 
   addChannel(channel) {
     if (this.dataViews.length < this.numChannels) {
-      // Create a Float32Array for this channel's data
+  
       const buffer = new Float32Array(channel.length);
       
-      // Copy the channel data
+     
       for (let i = 0; i < channel.length; i++) {
         buffer[i] = channel[i];
       }
       
-      // Convert to 16-bit PCM
+
       const view = new DataView(new ArrayBuffer(buffer.length * 2));
       for (let i = 0; i < buffer.length; i++) {
         let sample = Math.max(-1, Math.min(1, buffer[i]));
@@ -278,34 +277,34 @@ class WavAudioEncoder {
     const buffer = new ArrayBuffer(44 + dataSize);
     const view = new DataView(buffer);
     
-    // RIFF identifier
+
     writeString(view, 0, 'RIFF');
-    // RIFF chunk length
+
     view.setUint32(4, 36 + dataSize, true);
-    // RIFF type
+
     writeString(view, 8, 'WAVE');
-    // Format chunk identifier
+
     writeString(view, 12, 'fmt ');
-    // Format chunk length
+ 
     view.setUint32(16, 16, true);
-    // Sample format (raw)
+
     view.setUint16(20, 1, true);
-    // Channel count
+
     view.setUint16(22, this.numChannels, true);
-    // Sample rate
+
     view.setUint32(24, this.sampleRate, true);
-    // Byte rate (sample rate * block align)
+   )
     view.setUint32(28, this.sampleRate * this.numChannels * 2, true);
-    // Block align (channel count * bytes per sample)
+  
     view.setUint16(32, this.numChannels * 2, true);
-    // Bits per sample
+
     view.setUint16(34, 16, true);
-    // Data chunk identifier
+ 
     writeString(view, 36, 'data');
-    // Data chunk length
+
     view.setUint32(40, dataSize, true);
     
-    // Write interleaved data
+    
     let offset = 44;
     for (let i = 0; i < this.numSamples; i++) {
       for (let channel = 0; channel < this.numChannels; channel++) {
@@ -316,7 +315,7 @@ class WavAudioEncoder {
       }
     }
     
-    // Create a Blob from the buffer
+  r
     return new Blob([buffer], { type: 'audio/wav' });
   }
 }
