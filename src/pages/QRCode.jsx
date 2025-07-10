@@ -86,7 +86,7 @@ export const QrCodeGenerator = () => {
   const svgRef = useRef(null);
   const inputRef = useRef(null);
   
-  // Focus input field on component mount
+
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
