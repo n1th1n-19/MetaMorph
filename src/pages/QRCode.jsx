@@ -2,15 +2,15 @@ import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState, useCallback, useEffect } from "react";
 import "../CSS/qrcode.css";
 
-// Utility functions
+
 const downloadStringAsFile = (data, filename) => {
   try {
     const a = document.createElement("a");
     a.download = filename;
     a.href = data;
-    document.body.appendChild(a); // Needed for Firefox
+    document.body.appendChild(a); 
     a.click();
-    document.body.removeChild(a); // Clean up
+    document.body.removeChild(a); 
     return true;
   } catch (error) {
     console.error("Download failed:", error);
@@ -26,9 +26,9 @@ const convertSvgToPng = (svgNode, callback) => {
 
     const img = new Image();
     img.onload = () => {
-      // Create canvas with proper dimensions
+      
       const canvas = document.createElement("canvas");
-      // Increase size for better quality
+      
       const scale = 2;
       canvas.width = img.width * scale;
       canvas.height = img.height * scale;
@@ -39,7 +39,7 @@ const convertSvgToPng = (svgNode, callback) => {
         return;
       }
       
-      // Apply scaling for better resolution
+      
       ctx.scale(scale, scale);
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -93,18 +93,17 @@ export const QrCodeGenerator = () => {
     }
   }, []);
 
-  // Show notification helper
+
   const showNotification = useCallback((message, type = "success") => {
     setNotification({ message, type });
     setTimeout(() => setNotification({ message: "", type: "" }), 3000);
   }, []);
 
-  // Handle value change
+  
   const handleValueChange = useCallback((e) => {
     setValue(e.target.value);
   }, []);
 
-  // Handle download SVG
   const handleDownloadSvg = useCallback(() => {
     setIsLoading(true);
     const svgNode = svgRef.current;
@@ -122,7 +121,7 @@ export const QrCodeGenerator = () => {
       return;
     }
     
-    // Generate filename with timestamp and encoded content
+
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const contentHint = value.substring(0, 20).replace(/[^a-zA-Z0-9]/g, "_");
     const filename = `qrcode_${contentHint}_${timestamp}.svg`;
@@ -137,7 +136,7 @@ export const QrCodeGenerator = () => {
     setIsLoading(false);
   }, [value, showNotification]);
 
-  // Handle download PNG
+
   const handleDownloadPng = useCallback(() => {
     setIsLoading(true);
     const svgNode = svgRef.current;
@@ -155,7 +154,7 @@ export const QrCodeGenerator = () => {
         return;
       }
       
-      // Generate filename with timestamp and encoded content
+
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
       const contentHint = value.substring(0, 20).replace(/[^a-zA-Z0-9]/g, "_");
       const filename = `qrcode_${contentHint}_${timestamp}.png`;
@@ -171,7 +170,7 @@ export const QrCodeGenerator = () => {
     });
   }, [value, showNotification]);
 
-  // Handle copy SVG
+
   const handleCopySvg = useCallback(() => {
     const svgNode = svgRef.current;
     
@@ -192,7 +191,7 @@ export const QrCodeGenerator = () => {
       });
   }, [showNotification]);
 
-  // Clear input field
+
   const handleClear = useCallback(() => {
     setValue("");
     if (inputRef.current) {
@@ -286,7 +285,7 @@ export const QrCodeGenerator = () => {
             ref={svgRef}
             size={size}
             title={value}
-            value={value || " "} // Space as fallback to prevent errors
+            value={value || " "} 
           />
         ) : (
           <div className="qr-placeholder">Enter text to generate QR code</div>
