@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 import { 
   Box, 
@@ -293,7 +293,7 @@ class WavAudioEncoder {
     view.setUint16(22, this.numChannels, true);
 
     view.setUint32(24, this.sampleRate, true);
-   )
+
     view.setUint32(28, this.sampleRate * this.numChannels * 2, true);
   
     view.setUint16(32, this.numChannels * 2, true);
@@ -315,7 +315,6 @@ class WavAudioEncoder {
       }
     }
     
-  r
     return new Blob([buffer], { type: 'audio/wav' });
   }
 }
