@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "ytdl-core": "^4.11.5"
+  }
+}
