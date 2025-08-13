@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { Button, Box, Typography, TextField, CircularProgress, Alert, Snackbar, IconButton, Stack, Paper } from "@mui/material";
 import Tesseract from "tesseract.js";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";

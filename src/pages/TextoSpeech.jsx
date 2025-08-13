@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   TextField, 
   Button, 
@@ -79,7 +79,7 @@ export default function TextToSpeech() {
         synth.cancel();
       }
     };
-  }, []);
+  }, [selectedLanguage]);
   
   useEffect(() => {
     const matchingVoices = voices.filter(voice => voice.lang.startsWith(selectedLanguage));
@@ -392,7 +392,7 @@ export default function TextToSpeech() {
             min={0}
             max={1}
             step={0.1}
-            onChange={(e, newValue) => setVolume(newValue)}
+            onChange={(_e, newValue) => setVolume(newValue)}
             aria-label="Volume"
             valueLabelDisplay="auto"
             valueLabelFormat={value => `${Math.round(value * 100)}%`}
@@ -413,7 +413,7 @@ export default function TextToSpeech() {
             min={0.1}
             max={2}
             step={0.1}
-            onChange={(e, newValue) => setRate(newValue)}
+            onChange={(_e, newValue) => setRate(newValue)}
             aria-label="Speech rate"
             valueLabelDisplay="auto"
             valueLabelFormat={value => `${value}x`}
@@ -433,7 +433,7 @@ export default function TextToSpeech() {
             min={0.1}
             max={2}
             step={0.1}
-            onChange={(e, newValue) => setPitch(newValue)}
+            onChange={(_e, newValue) => setPitch(newValue)}
             aria-label="Speech pitch"
             valueLabelDisplay="auto"
             sx={{

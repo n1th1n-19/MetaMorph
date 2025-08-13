@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box, 
   Button, 
@@ -91,7 +91,7 @@ export default function SpeechToText() {
       setShowTranslation(false);
       setTranslatedText('');
     }
-  }, [transcript]);
+  }, [transcript, showTranslation]);
   
   const startListening = () => {
     setIsListening(true);

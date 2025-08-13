@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { nanoid } from "nanoid";
 import { 
   TextField, 
@@ -13,7 +13,6 @@ import {
   CircularProgress,
   Chip,
   Divider,
-  FormHelperText,
   InputAdornment,
   List,
   ListItem,
@@ -24,8 +23,6 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HistoryIcon from "@mui/icons-material/History";
 import LinkIcon from "@mui/icons-material/Link";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ErrorIcon from "@mui/icons-material/Error";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import QrCodeIcon from "@mui/icons-material/QrCode";
@@ -165,7 +162,7 @@ export default function URLShortener() {
     );
   };
   
-  const QRCode = ({ url }) => {
+  const QRCode = ({ url: _url }) => {
     return (
       <Box sx={{ 
         display: 'flex',
