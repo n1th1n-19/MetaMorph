@@ -1,0 +1,33 @@
+# Vercel ignore file
+# Files and directories to exclude from deployment
+
+# Development files
+.env.local
+.env.development
+.env.test
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Cache
+.cache
+.parcel-cache
+.eslintcache
+
+# Dependencies
+node_modules
+
+# Build artifacts (handled by Vercel)
+.next
+out
+dist

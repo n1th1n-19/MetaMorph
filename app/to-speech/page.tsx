@@ -239,17 +239,28 @@ export default function TextToSpeech() {
         severity: "info"
       });
 
-      // Create audio context for recording
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      audioContextRef.current = audioContext;
-      
-      // Create a destination for recording
-      const dest = audioContext.createMediaStreamDestination();
-      
-      // Create media recorder
-      const mediaRecorder = new MediaRecorder(dest.stream, {
-        mimeType: 'audio/webm;codecs=opus'
+      // Request microphone access to capture system audio
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        } 
       });
+      
+      // Create media recorder with better audio format options
+      let mimeType = 'audio/webm;codecs=opus';
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        mimeType = 'audio/webm';
+        if (!MediaRecorder.isTypeSupported(mimeType)) {
+          mimeType = 'audio/mp4';
+          if (!MediaRecorder.isTypeSupported(mimeType)) {
+            mimeType = 'audio/wav';
+          }
+        }
+      }
+      
+      const mediaRecorder = new MediaRecorder(stream, { mimeType });
       mediaRecorderRef.current = mediaRecorder;
       
       const chunks: BlobPart[] = [];
@@ -261,7 +272,10 @@ export default function TextToSpeech() {
       };
       
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/webm' });
+        // Stop all tracks to release microphone
+        stream.getTracks().forEach(track => track.stop());
+        
+        const blob = new Blob(chunks, { type: mimeType });
         setAudioBlob(blob);
         const url = URL.createObjectURL(blob);
         setDownloadUrl(url);
@@ -274,23 +288,24 @@ export default function TextToSpeech() {
       };
       
       // Start recording
-      mediaRecorder.start();
+      mediaRecorder.start(100); // Record in 100ms chunks for better quality
       
       // Create and configure utterance
       const utterance = createUtterance();
-      if (utterance) {
-        // Connect speech synthesis to recording destination
-        // Note: This is a workaround since we can't directly capture SpeechSynthesis output
-        // We'll use a different approach with Web Audio API
-        
+      if (utterance) {        
         utterance.onend = () => {
           setTimeout(() => {
-            mediaRecorder.stop();
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+              mediaRecorderRef.current.stop();
+            }
           }, 500); // Small delay to ensure all audio is captured
         };
         
-        utterance.onerror = () => {
-          mediaRecorder.stop();
+        utterance.onerror = (event) => {
+          console.error("Speech synthesis error:", event);
+          if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+            mediaRecorderRef.current.stop();
+          }
           setIsRecording(false);
           setSnackbar({
             open: true,
@@ -299,25 +314,41 @@ export default function TextToSpeech() {
           });
         };
         
+        // Start speech synthesis
         synthRef.current.speak(utterance);
       }
       
     } catch (error) {
       console.error("Recording error:", error);
       setIsRecording(false);
-      setSnackbar({
-        open: true,
-        message: "Failed to start recording. Your browser may not support this feature.",
-        severity: "error"
-      });
+      if (error instanceof Error && error.name === 'NotAllowedError') {
+        setSnackbar({
+          open: true,
+          message: "Microphone permission denied. Please allow microphone access to record audio.",
+          severity: "error"
+        });
+      } else {
+        setSnackbar({
+          open: true,
+          message: "Failed to start recording. Your browser may not support this feature.",
+          severity: "error"
+        });
+      }
     }
   };
   
   const downloadAudio = () => {
-    if (downloadUrl) {
+    if (downloadUrl && audioBlob) {
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.download = `speech_${new Date().toISOString().split('T')[0]}.webm`;
+      
+      // Determine file extension based on MIME type
+      let extension = 'webm';
+      if (audioBlob.type.includes('mp4')) extension = 'mp4';
+      else if (audioBlob.type.includes('wav')) extension = 'wav';
+      else if (audioBlob.type.includes('webm')) extension = 'webm';
+      
+      link.download = `speech_${new Date().toISOString().split('T')[0]}.${extension}`;
       link.click();
       setSnackbar({
         open: true,
@@ -735,11 +766,11 @@ export default function TextToSpeech() {
                           color: 'rgba(255, 255, 255, 0.6)' 
                         }}>
                           {isRecording ? (
-                            '🎙️ Recording speech audio for download'
+                            '🎙️ Recording speech audio for download...'
                           ) : downloadUrl ? (
-                            '✅ Audio file ready (WebM format)'
+                            `✅ Audio file ready (${audioBlob?.type.includes('webm') ? 'WebM' : audioBlob?.type.includes('mp4') ? 'MP4' : audioBlob?.type.includes('wav') ? 'WAV' : 'Audio'} format)`
                           ) : (
-                            '💡 Click "Record Speech" to generate downloadable audio'
+                            '💡 Allow microphone access, then click "Record Speech" to capture and download the audio'
                           )}
                         </Typography>
                       </Box>

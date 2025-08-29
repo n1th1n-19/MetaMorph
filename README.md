@@ -20,7 +20,7 @@
 
 ## 📋 Overview
 
-MetaMorph is a lightweight, modular, multi-utility web application built with React and Vite. It offers a suite of powerful tools including file conversion, speech recognition, QR code generation, OCR text extraction, and media conversion — all packed into a single seamless interface.
+MetaMorph is a powerful, modern multi-utility web application built with Next.js 14 and React 18. It offers a suite of essential tools including file conversion, speech recognition, QR code generation, OCR text extraction, and media conversion — all packed into a single seamless interface with optimized performance and SEO.
 
 Transform, convert, and enhance your digital content all in one place, without switching between different apps or services.
 
@@ -60,62 +60,112 @@ Transform, convert, and enhance your digital content all in one place, without s
    npm install
    ```
 
-3. **Run the development server:**
+3. **Set up environment variables (optional):**
+   ```bash
+   cp .env.example .env.local
+   ```
+   Edit `.env.local` and add your configuration:
+   ```
+   NEXT_PUBLIC_BASE_URL=http://localhost:3000
+   ```
+
+4. **Run the development server:**
    ```bash
    npm run dev
    ```
 
-4. **Open the app:**
+5. **Open the app:**
    Open your browser and navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🚀 Deployment
+
+### Deploy to Vercel (Recommended)
+
+1. **Fork/Clone this repository**
+2. **Connect to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Vercel will automatically detect it's a Next.js project
+3. **Set Environment Variables:**
+   - Add `NEXT_PUBLIC_BASE_URL` with your domain (e.g., `https://your-app.vercel.app`)
+4. **Deploy:**
+   - Vercel will automatically build and deploy your app
+   - Your app will be live at `https://your-project-name.vercel.app`
+
+### Manual Deployment
+
+```bash
+# Build the application
+npm run build
+
+# Start production server
+npm run start
+```
 
 
 
 ## <h2 id="tech-stack">Tech Stack</h2>
 
-- **Frontend:** React 19 with JSX
-- **Build Tool:** Vite 5
+- **Framework:** Next.js 14 with App Router
+- **Frontend:** React 18 with TypeScript
 - **UI Framework:** Material-UI (MUI) v6
-- **Routing:** React Router v7
-- **Layout System:** Toolpad Core dashboard layout
+- **Styling:** Emotion CSS-in-JS
+- **Build Tool:** Next.js built-in (Turbopack)
+- **Deployment:** Vercel (optimized)
+- **SEO:** Next.js Metadata API + Structured Data
 - **Key Libraries:**
   - Tesseract.js for OCR functionality
-  - QRCode.react for QR code generation
+  - QRCode.react for QR code generation  
   - File-saver for file downloads
   - PDF-lib for PDF processing
   - XLSX for spreadsheet handling
   - Mammoth for Word document processing
+  - Web Audio API for media processing
 
 ## <h2 id="project-structure">Project Structure</h2>
 
 ```
 MetaMorph/
+├── app/                          # Next.js App Router
+│   ├── components/
+│   │   └── ClientThemeProvider.tsx
+│   ├── file-converter/
+│   │   ├── layout.tsx           # SEO metadata
+│   │   └── page.tsx
+│   ├── mp4-to-mp3/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── ocr-extractor/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── qr-code/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── r/
+│   │   └── [code]/
+│   │       └── page.tsx         # Dynamic redirect routes
+│   ├── speech-to-text/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── to-speech/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── url-shortener/
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── layout.tsx               # Root layout with SEO
+│   ├── page.tsx                 # Homepage
+│   ├── robots.ts                # SEO robots.txt
+│   └── sitemap.ts               # SEO sitemap
 ├── public/
-├── src/
-│   ├── assets/
-│   │   ├── log.ico
-│   │   ├── logooo.gif
-│   │   ├── logooo.png
-│   │   └── medium-m.icns
-│   ├── CSS/
-│   │   └── qrcode.css
-│   ├── layouts/
-│   │   ├── SplashCurser.jsx
-│   │   └── dashboard.jsx
-│   ├── pages/
-│   │   ├── FileConverter.jsx
-│   │   ├── Mp3.jsx
-│   │   ├── OCRExtractor.jsx
-│   │   ├── QRCode.jsx
-│   │   ├── SpeechToText.jsx
-│   │   ├── TextoSpeech.jsx
-│   │   ├── URLShortener.jsx
-│   │   └── index.jsx
-│   ├── App.jsx
-│   └── main.jsx
-├── cn.ts
-├── theme.js
-├── vite.config.mts
-└── package.json
+│   ├── manifest.json            # PWA manifest
+│   ├── favicon.ico
+│   └── ...
+├── .env.example                 # Environment variables template
+├── next.config.mjs              # Next.js configuration
+├── package.json
+├── tsconfig.json
+└── vercel.json                  # Vercel deployment config
 ```
 
 ## <h2 id="roadmap">Roadmap</h2>

@@ -1,0 +1,11 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
+  "rewrites": [
+    {
+      "source": "/r/:code",
+      "destination": "/r/:code"
+    }
+  ]
+}

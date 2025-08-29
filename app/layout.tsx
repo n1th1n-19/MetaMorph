@@ -1,55 +1,85 @@
-'use client';
-
 import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import type { Metadata, Viewport } from 'next';
+import ClientThemeProvider from './components/ClientThemeProvider';
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#00a8e8',
-    },
-    secondary: {
-      main: '#667eea',
-    },
-    background: {
-      default: '#0c0c0c',
-      paper: '#1a1a1a',
-    },
-    text: {
-      primary: '#ffffff',
-      secondary: 'rgba(255, 255, 255, 0.7)',
-    },
+export const metadata: Metadata = {
+  title: {
+    default: 'MetaMorph - One app, endless transformations',
+    template: '%s | MetaMorph'
   },
-  typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+  description: 'A powerful multi-utility web application featuring QR code generation, URL shortening, text-to-speech, speech-to-text, OCR extraction, file conversion, and MP4 to MP3 conversion. All tools in one place.',
+  keywords: [
+    'QR code generator',
+    'URL shortener',
+    'text to speech',
+    'speech to text',
+    'OCR',
+    'file converter',
+    'MP4 to MP3',
+    'web tools',
+    'utility app',
+    'online tools'
+  ],
+  authors: [{ name: 'MetaMorph Team' }],
+  creator: 'MetaMorph',
+  publisher: 'MetaMorph',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: {
-        body: {
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#333 #0c0c0c',
-          '&::-webkit-scrollbar': {
-            width: '8px',
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#0c0c0c',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: '#333',
-            borderRadius: '4px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: '#555',
-          },
-        },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'MetaMorph - One app, endless transformations',
+    description: 'A powerful multi-utility web application with QR codes, URL shortening, text-to-speech, OCR, and more.',
+    url: '/',
+    siteName: 'MetaMorph',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MetaMorph - Multi-utility web application',
       },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'MetaMorph - One app, endless transformations',
+    description: 'Powerful web tools for QR codes, URL shortening, text-to-speech, OCR, and file conversion.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
-});
+  verification: {
+    google: 'your-google-verification-code',
+  },
+};
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0c0c0c' },
+  ],
+};
 
 export default function RootLayout({
   children,
@@ -57,24 +87,55 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <title>MetaMorph - One app, endless transformations</title>
-        <meta name="description" content="A powerful multi-utility web application" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/assets/log.ico" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" 
           rel="stylesheet" 
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "MetaMorph",
+              "description": "A powerful multi-utility web application featuring QR code generation, URL shortening, text-to-speech, speech-to-text, OCR extraction, file conversion, and MP4 to MP3 conversion.",
+              "url": process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+              "applicationCategory": "UtilityApplication",
+              "operatingSystem": "Web Browser",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "featureList": [
+                "QR Code Generator",
+                "URL Shortener", 
+                "Text to Speech",
+                "Speech to Text",
+                "OCR Text Extractor",
+                "File Converter",
+                "MP4 to MP3 Converter"
+              ],
+              "author": {
+                "@type": "Organization",
+                "name": "MetaMorph Team"
+              }
+            })
+          }}
+        />
       </head>
-      <body>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+      <body suppressHydrationWarning>
+        <ClientThemeProvider>
           {children}
-        </ThemeProvider>
+        </ClientThemeProvider>
       </body>
     </html>
   );
