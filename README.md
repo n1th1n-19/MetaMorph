@@ -97,10 +97,6 @@ MetaMorph/
 │   │   ├── logooo.gif
 │   │   ├── logooo.png
 │   │   └── medium-m.icns
-│   ├── Components/
-│   │   ├── AsciiText.jsx
-│   │   ├── Aurora.jsx
-│   │   └── Aurora.css
 │   ├── CSS/
 │   │   └── qrcode.css
 │   ├── layouts/
