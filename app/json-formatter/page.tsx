@@ -66,7 +66,6 @@ export default function JSONFormatter() {
       if (format === 'minify') {
         formatted = JSON.stringify(parsed);
       } else {
-        // Sort keys if option is enabled
         const sortedParsed = sortKeys ? sortObjectKeys(parsed) : parsed;
         formatted = JSON.stringify(sortedParsed, null, indentSize);
       }

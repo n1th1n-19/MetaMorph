@@ -39,7 +39,6 @@ import {
   Home as HomeIcon,
   Refresh as RefreshIcon
 } from '@mui/icons-material';
-// import { useDropzone } from 'react-dropzone';
 
 interface ConvertedImage {
   id: string;
@@ -123,7 +122,6 @@ export default function ImageConverter() {
         canvas.width = img.width;
         canvas.height = img.height;
         
-        // Clear canvas with white background for JPEG
         if (format === 'jpeg') {
           ctx.fillStyle = 'white';
           ctx.fillRect(0, 0, canvas.width, canvas.height);

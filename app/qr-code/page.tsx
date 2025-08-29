@@ -38,7 +38,6 @@ import TuneIcon from '@mui/icons-material/Tune';
 import HomeIcon from '@mui/icons-material/Home';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-// Utility functions
 const downloadStringAsFile = (data: string, filename: string) => {
   try {
     const a = document.createElement("a");
