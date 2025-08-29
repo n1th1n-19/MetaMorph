@@ -1,5 +1,7 @@
 import React from 'react';
 import type { Metadata, Viewport } from 'next';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import ClientThemeProvider from './components/ClientThemeProvider';
 
 export const metadata: Metadata = {
@@ -136,6 +138,8 @@ export default function RootLayout({
         <ClientThemeProvider>
           {children}
         </ClientThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

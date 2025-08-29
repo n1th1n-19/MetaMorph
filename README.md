@@ -88,7 +88,10 @@ Transform, convert, and enhance your digital content all in one place, without s
    - Vercel will automatically detect it's a Next.js project
 3. **Set Environment Variables:**
    - Add `NEXT_PUBLIC_BASE_URL` with your domain (e.g., `https://your-app.vercel.app`)
-4. **Deploy:**
+4. **Enable Analytics (Optional):**
+   - Vercel Analytics and Speed Insights are pre-configured
+   - They will automatically start collecting data once deployed
+5. **Deploy:**
    - Vercel will automatically build and deploy your app
    - Your app will be live at `https://your-project-name.vercel.app`
 
@@ -113,6 +116,7 @@ npm run start
 - **Styling:** Emotion CSS-in-JS
 - **Build Tool:** Next.js built-in (Turbopack)
 - **Deployment:** Vercel (optimized)
+- **Analytics:** Vercel Analytics + Speed Insights
 - **SEO:** Next.js Metadata API + Structured Data
 - **Key Libraries:**
   - Tesseract.js for OCR functionality
