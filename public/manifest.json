@@ -1,0 +1,29 @@
+{
+  "name": "MetaMorph - One app, endless transformations",
+  "short_name": "MetaMorph",
+  "description": "A powerful multi-utility web application with tools for QR codes, URL shortening, text-to-speech, OCR, and file conversion.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0c0c",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "utilities", "tools"],
+  "lang": "en-US"
+}
