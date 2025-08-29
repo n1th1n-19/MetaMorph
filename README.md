@@ -38,9 +38,8 @@ Transform, convert, and enhance your digital content all in one place, without s
 
 ## <h2 id="demo">Demo</h2>
 
-🚀 **Live Demo:** [MetaMorph App](https://metamorph02.vercel.app)
+🚀 **Live Demo:** [MetaMorph App](https://metamorph01.vercel.app)
 
-<!-- ![MetaMorph Screenshot](https://via.placeholder.com/800x400) -->
 
 ## <h2 id="installation">Installation</h2>
 
@@ -52,7 +51,7 @@ Transform, convert, and enhance your digital content all in one place, without s
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/n1th1n-19/cap.git
+   git clone https://github.com/n1th1n-19/MetaMorph.git
    cd cap
    ```
 
@@ -151,15 +150,13 @@ Please make sure to update tests as appropriate and follow the code style guidel
 <br><br>
 <p align="center">
   <a href="https://github.com/n1th1n-19">GitHub</a> •
-  <a href="https://twitter.com/your-twitter">Twitter</a> •
-  <a href="https://your-website.com">Website</a>
+  <a href="https://x.com/n1th1n_log">Twitter</a> 
 </p>
 
 <br><br>
 
-## 🙏 Acknowledgements
 
-- All open-source contributors who made this project possible
+- Open to all
 
 ---
 
