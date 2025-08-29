@@ -109,6 +109,7 @@ npm run start
 - **Framework:** Next.js 14 with App Router
 - **Frontend:** React 18 with TypeScript
 - **UI Framework:** Material-UI (MUI) v6
+- **Typography:** Inter + Poppins (Google Fonts)
 - **Styling:** Emotion CSS-in-JS
 - **Build Tool:** Next.js built-in (Turbopack)
 - **Deployment:** Vercel (optimized)
