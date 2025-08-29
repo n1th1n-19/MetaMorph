@@ -20,7 +20,7 @@
 
 ## 📋 Overview
 
-MetaMorph is a lightweight, modular, multi-utility web application built with React and Node.js. It offers a suite of powerful tools ranging from file conversion and speech recognition to QR code generation — all packed into a single seamless interface.
+MetaMorph is a lightweight, modular, multi-utility web application built with React and Vite. It offers a suite of powerful tools including file conversion, speech recognition, QR code generation, OCR text extraction, and media conversion — all packed into a single seamless interface.
 
 Transform, convert, and enhance your digital content all in one place, without switching between different apps or services.
 
@@ -28,25 +28,25 @@ Transform, convert, and enhance your digital content all in one place, without s
 
 | Tool | Description |
 |------|-------------|
-| 📄 **File Converter** | Convert files between different formats |
-| 👁️ **OCR Extractor** | Extract text from images using Optical Character Recognition |
+| 🔊 **Text to Speech** | Convert written text into natural-sounding speech |
+| 🎙️ **Speech to Text** | Convert audio recordings into text |
+| 🎵 **Mp4 to Mp3 Converter** | Convert MP4 video files to MP3 audio format |
+| 🔗 **URL Shortener** | Create short, shareable links from long URLs |
 | 📱 **QR Code Generator** | Generate QR codes from text or URLs |
-| 🎙️ **Speech to Text** | Offline speech recognition using Vosk |
-| 🔊 **Text to Speech** | Convert written text into speech |
-| 🔗 **URL Shortener** | Shrink long links into short ones |
-| 🖼️ **ASCII Text Generator** | Turn text into ASCII art |
+| 👁️ **OCR Extractor** | Extract text from images using Optical Character Recognition |
+| 📄 **File Converter** | Convert files between different formats |
 
 ## <h2 id="demo">Demo</h2>
 
-Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
+🚀 **Live Demo:** [MetaMorph App](https://metamorph02.vercel.app)
 
 <!-- ![MetaMorph Screenshot](https://via.placeholder.com/800x400) -->
 
 ## <h2 id="installation">Installation</h2>
 
 ### Prerequisites
-- Node.js (v14.0 or higher)
-- npm (v6.0 or higher)
+- Node.js (v18.0 or higher)
+- npm (v8.0 or higher)
 
 ### Setup
 
@@ -73,10 +73,18 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 
 ## <h2 id="tech-stack">Tech Stack</h2>
 
-- **Frontend:** React 18 with JSX, CSS
-- **Layout System:** Custom dashboard layout with modular components
-- **Libraries:**
-  - Browser-native APIs (File APIs, Canvas, Web Speech API)
+- **Frontend:** React 19 with JSX
+- **Build Tool:** Vite 5
+- **UI Framework:** Material-UI (MUI) v6
+- **Routing:** React Router v7
+- **Layout System:** Toolpad Core dashboard layout
+- **Key Libraries:**
+  - Tesseract.js for OCR functionality
+  - QRCode.react for QR code generation
+  - File-saver for file downloads
+  - PDF-lib for PDF processing
+  - XLSX for spreadsheet handling
+  - Mammoth for Word document processing
 
 ## <h2 id="project-structure">Project Structure</h2>
 
@@ -85,6 +93,10 @@ MetaMorph/
 ├── public/
 ├── src/
 │   ├── assets/
+│   │   ├── log.ico
+│   │   ├── logooo.gif
+│   │   ├── logooo.png
+│   │   └── medium-m.icns
 │   ├── Components/
 │   │   ├── AsciiText.jsx
 │   │   ├── Aurora.jsx
@@ -96,25 +108,31 @@ MetaMorph/
 │   │   └── dashboard.jsx
 │   ├── pages/
 │   │   ├── FileConverter.jsx
+│   │   ├── Mp3.jsx
 │   │   ├── OCRExtractor.jsx
 │   │   ├── QRCode.jsx
 │   │   ├── SpeechToText.jsx
 │   │   ├── TextoSpeech.jsx
 │   │   ├── URLShortener.jsx
-│   │   ├── index.jsx
+│   │   └── index.jsx
 │   ├── App.jsx
 │   └── main.jsx
+├── cn.ts
+├── theme.js
+├── vite.config.mts
+└── package.json
 ```
 
 ## <h2 id="roadmap">Roadmap</h2>
 
-- [ ] Dark mode and theme toggler
-- [ ] Drag-and-drop file support
+- [ ] Dark mode and theme customization
+- [ ] Drag-and-drop file support for all converters
 - [ ] Offline mode/PWA support
-- [ ] More export options (PDF, JSON, CSV)
-- [ ] Multi-language support
-- [ ] User accounts and saved transformations
-- [ ] Batch processing capabilities
+- [ ] Batch file processing
+- [ ] Additional audio/video format support
+- [ ] Multi-language text-to-speech voices
+- [ ] Advanced OCR with multiple language support
+- [ ] File compression and optimization tools
 
 ## <h2 id="contributing">Contribution</h2>
 
