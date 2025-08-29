@@ -2,14 +2,15 @@ import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState, useCallback, useEffect } from "react";
 import "../CSS/qrcode.css";
 
+// Utility functions
 const downloadStringAsFile = (data, filename) => {
   try {
     const a = document.createElement("a");
     a.download = filename;
     a.href = data;
-    document.body.appendChild(a);
+    document.body.appendChild(a); // Needed for Firefox
     a.click();
-    document.body.removeChild(a);
+    document.body.removeChild(a); // Clean up
     return true;
   } catch (error) {
     console.error("Download failed:", error);
@@ -21,36 +22,37 @@ const convertSvgToPng = (svgNode, callback) => {
   try {
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svgNode);
-    const svgData = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-      svgString
-    )}`;
+    const svgData = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`;
 
     const img = new Image();
     img.onload = () => {
+      // Create canvas with proper dimensions
       const canvas = document.createElement("canvas");
+      // Increase size for better quality
       const scale = 2;
       canvas.width = img.width * scale;
       canvas.height = img.height * scale;
-
+      
       const ctx = canvas.getContext("2d");
       if (!ctx) {
         callback(null, new Error("Failed to get canvas context"));
         return;
       }
-
+      
+      // Apply scaling for better resolution
       ctx.scale(scale, scale);
       ctx.fillStyle = "#FFFFFF";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
-
+      
       const pngData = canvas.toDataURL("image/png");
       callback(pngData, null);
     };
-
-    img.onerror = () => {
+    
+    img.onerror = (err) => {
       callback(null, new Error("Image conversion failed"));
     };
-
+    
     img.src = svgData;
   } catch (error) {
     callback(null, error);
@@ -64,9 +66,7 @@ const serializeSvg = (svgNode) => {
     const svgString = serializer.serializeToString(svgNode);
     return {
       string: svgString,
-      dataUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-        svgString
-      )}`,
+      dataUrl: `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgString)}`
     };
   } catch (error) {
     console.error("SVG serialization failed:", error);
@@ -82,102 +82,108 @@ export const QrCodeGenerator = () => {
   const [backgroundColor, setBackgroundColor] = useState("#FFFFFF");
   const [notification, setNotification] = useState({ message: "", type: "" });
   const [isLoading, setIsLoading] = useState(false);
-
+  
   const svgRef = useRef(null);
   const inputRef = useRef(null);
-
+  
   // Focus input field on component mount
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []); // ✔ closed the hook correctly
+  }, []);
 
+  // Show notification helper
   const showNotification = useCallback((message, type = "success") => {
     setNotification({ message, type });
     setTimeout(() => setNotification({ message: "", type: "" }), 3000);
   }, []);
 
+  // Handle value change
   const handleValueChange = useCallback((e) => {
     setValue(e.target.value);
   }, []);
 
+  // Handle download SVG
   const handleDownloadSvg = useCallback(() => {
     setIsLoading(true);
     const svgNode = svgRef.current;
-
+    
     if (!svgNode) {
       showNotification("QR code not found", "error");
       setIsLoading(false);
       return;
     }
-
+    
     const result = serializeSvg(svgNode);
     if (!result) {
       showNotification("Failed to generate SVG", "error");
       setIsLoading(false);
       return;
     }
-
+    
+    // Generate filename with timestamp and encoded content
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const contentHint = value.substring(0, 20).replace(/[^a-zA-Z0-9]/g, "_");
     const filename = `qrcode_${contentHint}_${timestamp}.svg`;
-
+    
     const success = downloadStringAsFile(result.dataUrl, filename);
     if (success) {
       showNotification("SVG downloaded successfully");
     } else {
       showNotification("Failed to download SVG", "error");
     }
-
+    
     setIsLoading(false);
   }, [value, showNotification]);
 
+  // Handle download PNG
   const handleDownloadPng = useCallback(() => {
     setIsLoading(true);
     const svgNode = svgRef.current;
-
+    
     if (!svgNode) {
       showNotification("QR code not found", "error");
       setIsLoading(false);
       return;
     }
-
+    
     convertSvgToPng(svgNode, (pngData, error) => {
       if (error || !pngData) {
         showNotification("Failed to convert to PNG", "error");
         setIsLoading(false);
         return;
       }
-
+      
+      // Generate filename with timestamp and encoded content
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
       const contentHint = value.substring(0, 20).replace(/[^a-zA-Z0-9]/g, "_");
       const filename = `qrcode_${contentHint}_${timestamp}.png`;
-
+      
       const success = downloadStringAsFile(pngData, filename);
       if (success) {
         showNotification("PNG downloaded successfully");
       } else {
         showNotification("Failed to download PNG", "error");
       }
-
+      
       setIsLoading(false);
     });
   }, [value, showNotification]);
 
+  // Handle copy SVG
   const handleCopySvg = useCallback(() => {
     const svgNode = svgRef.current;
-
+    
     if (!svgNode) {
       showNotification("QR code not found", "error");
       return;
     }
-
+    
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svgNode);
-
-    navigator.clipboard
-      .writeText(svgString)
+    
+    navigator.clipboard.writeText(svgString)
       .then(() => {
         showNotification("SVG copied to clipboard");
       })
@@ -186,6 +192,7 @@ export const QrCodeGenerator = () => {
       });
   }, [showNotification]);
 
+  // Clear input field
   const handleClear = useCallback(() => {
     setValue("");
     if (inputRef.current) {
@@ -196,7 +203,7 @@ export const QrCodeGenerator = () => {
   return (
     <div className="qr-container">
       <h1 className="qr-title">QR Code Generator</h1>
-
+      
       <div className="qr-input-group">
         <input
           className="qr-input"
@@ -207,9 +214,9 @@ export const QrCodeGenerator = () => {
           aria-label="QR code content"
         />
         {value && (
-          <button
-            className="qr-clear-button"
-            onClick={handleClear}
+          <button 
+            className="qr-clear-button" 
+            onClick={handleClear} 
             type="button"
             aria-label="Clear input"
           >
@@ -217,7 +224,7 @@ export const QrCodeGenerator = () => {
           </button>
         )}
       </div>
-
+      
       <div className="qr-options">
         <div className="qr-option">
           <label htmlFor="qr-size">Size:</label>
@@ -232,7 +239,7 @@ export const QrCodeGenerator = () => {
           />
           <span>{size}px</span>
         </div>
-
+        
         <div className="qr-option">
           <label htmlFor="qr-error-correction">Error Correction:</label>
           <select
@@ -246,7 +253,7 @@ export const QrCodeGenerator = () => {
             <option value="H">High (30%)</option>
           </select>
         </div>
-
+        
         <div className="qr-option">
           <label htmlFor="qr-fg-color">Foreground:</label>
           <input
@@ -256,7 +263,7 @@ export const QrCodeGenerator = () => {
             onChange={(e) => setForegroundColor(e.target.value)}
           />
         </div>
-
+        
         <div className="qr-option">
           <label htmlFor="qr-bg-color">Background:</label>
           <input
@@ -267,7 +274,7 @@ export const QrCodeGenerator = () => {
           />
         </div>
       </div>
-
+      
       <div className="qr-code-wrapper">
         {value ? (
           <QRCodeSVG
@@ -275,21 +282,21 @@ export const QrCodeGenerator = () => {
             className="qr-code"
             fgColor={foregroundColor}
             level={errorCorrection}
-            includeMargin   // ← changed from marginSize
+            marginSize={2}
             ref={svgRef}
             size={size}
             title={value}
-            value={value || " "}
+            value={value || " "} // Space as fallback to prevent errors
           />
         ) : (
           <div className="qr-placeholder">Enter text to generate QR code</div>
         )}
       </div>
-
+      
       <div className="qr-buttons">
-        <button
-          className="qr-button"
-          onClick={handleDownloadSvg}
+        <button 
+          className="qr-button" 
+          onClick={handleDownloadSvg} 
           disabled={!value || isLoading}
           type="button"
         >
@@ -312,7 +319,7 @@ export const QrCodeGenerator = () => {
           Copy SVG
         </button>
       </div>
-
+      
       {notification.message && (
         <div className={`qr-notification qr-notification-${notification.type}`}>
           {notification.message}

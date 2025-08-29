@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import {
-  Button,
-  TextField,
-  Box,
-  Typography,
-  CircularProgress,
+import React, { useState, useEffect } from "react";
+import { 
+  Button, 
+  TextField, 
+  Box, 
+  Typography, 
+  CircularProgress, 
   LinearProgress,
   Snackbar,
   Alert,
@@ -23,25 +23,18 @@ import {
   Tabs
 } from "@mui/material";
 import axios from "axios";
-import {
-  FileDownload,
-  Info,
-  History,
-  Delete,
-  YouTube,
-  Twitter,
-  Facebook,
-  Instagram
+import { 
+  FileDownload, 
+  Info, 
+  History, 
+  Delete, 
+  YouTube, 
+  Twitter, 
+  Facebook, 
+  Instagram 
 } from "@mui/icons-material";
 
-const API_URL = import.meta.env.VITE_API_URL || (
-  import.meta.env.PROD 
-    ? `${window.location.origin}` 
-    : "http://localhost:3000"
-);
-
-console.log('API_URL:', API_URL);
-console.log('Environment:', import.meta.env.MODE);
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
 export default function VideoDownloader() {
   const [videoUrl, setVideoUrl] = useState("");
@@ -78,7 +71,7 @@ export default function VideoDownloader() {
     return platforms[activePlatform].regex.test(url);
   };
 
-  const handlePlatformChange = (_event, newValue) => {
+  const handlePlatformChange = (event, newValue) => {
     setActivePlatform(newValue);
     setVideoUrl("");
     setVideoInfo(null);
@@ -88,7 +81,7 @@ export default function VideoDownloader() {
   const fetchVideoInfo = async () => {
     setError("");
     setVideoInfo(null);
-
+    
     if (!videoUrl) {
       setError("Please enter a video URL.");
       return;
@@ -104,8 +97,8 @@ export default function VideoDownloader() {
     try {
       const response = await axios.get(`${API_URL}/info?url=${encodeURIComponent(videoUrl)}`);
       setVideoInfo(response.data);
-
-      if (response.data.formats && response.data.formats.length > 0) {
+      
+      if (response.data.formats.length > 0) {
         setSelectedFormat(response.data.formats[0].formatId);
       }
     } catch (error) {
@@ -119,7 +112,7 @@ export default function VideoDownloader() {
   const handleUrlChange = (e) => {
     const newUrl = e.target.value;
     setVideoUrl(newUrl);
-
+    
     if (!newUrl) {
       setVideoInfo(null);
     }
@@ -132,20 +125,16 @@ export default function VideoDownloader() {
   };
 
   const handleApiError = (error, defaultMessage) => {
-    console.error("API Error details:", error);
-    
     if (error.response) {
       if (error.response.status === 400) {
-        setError(error.response.data?.error || "Invalid video URL or format.");
-      } else if (error.response.status === 404) {
-        setError("API endpoint not found. Make sure the backend is deployed or running locally.");
+        setError(error.response.data.error || "Invalid video URL or format.");
       } else if (error.response.status === 429) {
         setError("Too many requests. Please try again later.");
       } else {
-        setError(`Server error: ${error.response.data?.error || error.response.status}`);
+        setError(`Server error: ${error.response.data.error || error.response.status}`);
       }
     } else if (error.request) {
-      setError("API not available. This feature requires the backend to be deployed on Vercel or running locally.");
+      setError("No response from server. Please check your connection.");
     } else {
       setError(`Error: ${error.message || defaultMessage}`);
     }
@@ -154,7 +143,7 @@ export default function VideoDownloader() {
   const downloadVideo = async () => {
     setError("");
     setSuccess(false);
-
+    
     if (!videoUrl) {
       setError("Please enter a video URL.");
       return;
@@ -185,24 +174,13 @@ export default function VideoDownloader() {
       });
 
       const contentType = response.headers["content-type"];
-      console.log("Response content-type:", contentType);
-      console.log("Response status:", response.status);
-      
-      // Check if we got an error response instead of video data
-      if (contentType && contentType.includes("application/json")) {
-        // Try to parse error response
-        const text = await response.data.text?.();
-        const errorData = text ? JSON.parse(text) : response.data;
-        throw new Error(errorData.error || "API returned error response");
-      }
-      
-      if (!contentType || (!contentType.includes("video") && !contentType.includes("application/octet-stream"))) {
-        throw new Error(`Invalid response format. Expected video file, got: ${contentType || 'unknown'}`);
+      if (!contentType || !contentType.includes("video")) {
+        throw new Error("Invalid response format. Expected video file.");
       }
 
       const blob = new Blob([response.data], { type: contentType });
       const link = document.createElement("a");
-
+      
       let filename = `${platforms[activePlatform].name.toLowerCase()}-video.mp4`;
       const disposition = response.headers["content-disposition"];
       if (disposition && disposition.includes("filename=")) {
@@ -212,15 +190,15 @@ export default function VideoDownloader() {
           filename = matches[1].replace(/['"]/g, "");
         }
       }
-
+      
       link.href = URL.createObjectURL(blob);
       link.download = filename;
       link.click();
-
+      
       setTimeout(() => URL.revokeObjectURL(link.href), 100);
-
+      
       setSuccess(true);
-
+      
       if (videoInfo) {
         const newDownload = {
           id: videoInfo.id,
@@ -230,7 +208,7 @@ export default function VideoDownloader() {
           downloadedAt: new Date().toISOString(),
           platform: videoInfo.platform || platforms[activePlatform].name.toLowerCase()
         };
-
+        
         const updatedDownloads = [newDownload, ...recentDownloads.slice(0, 4)];
         setRecentDownloads(updatedDownloads);
         localStorage.setItem("recentDownloads", JSON.stringify(updatedDownloads));
@@ -261,7 +239,7 @@ export default function VideoDownloader() {
         break;
       }
     }
-
+    
     setVideoUrl(url);
     fetchVideoInfo();
     setShowHistory(false);
@@ -306,11 +284,11 @@ export default function VideoDownloader() {
         <Typography variant="h4" fontWeight="bold" color="#00A8E8">
           Video Downloader
         </Typography>
-
+        
         <Box>
           <Tooltip title="Download History">
-            <IconButton
-              onClick={() => setShowHistory(!showHistory)}
+            <IconButton 
+              onClick={() => setShowHistory(!showHistory)} 
               sx={{ color: showHistory ? "#00A8E8" : "#888" }}
             >
               <History />
@@ -318,15 +296,15 @@ export default function VideoDownloader() {
           </Tooltip>
         </Box>
       </Box>
-
+      
       <Tabs
         value={activePlatform}
         onChange={handlePlatformChange}
         variant="scrollable"
         scrollButtons="auto"
-        sx={{
-          width: "100%",
-          borderBottom: 1,
+        sx={{ 
+          width: "100%", 
+          borderBottom: 1, 
           borderColor: "#333",
           "& .MuiTabs-indicator": { backgroundColor: "#00A8E8" },
           "& .Mui-selected": { color: "#00A8E8" },
@@ -334,26 +312,26 @@ export default function VideoDownloader() {
         }}
       >
         {platforms.map((platform, index) => (
-          <Tab
+          <Tab 
             key={index}
-            icon={platform.icon}
+            icon={platform.icon} 
             label={platform.name}
-            sx={{
+            sx={{ 
               minWidth: "auto",
               textTransform: "none",
               fontWeight: "bold",
               fontSize: "0.9rem"
-            }}
+            }} 
           />
         ))}
       </Tabs>
-
+      
       {showHistory && recentDownloads.length > 0 && (
         <Box sx={{ width: "100%" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
             <Typography variant="h6" color="#aaa">Recent Downloads</Typography>
-            <Button
-              startIcon={<Delete />}
+            <Button 
+              startIcon={<Delete />} 
               onClick={clearHistory}
               size="small"
               sx={{ color: "#888" }}
@@ -361,13 +339,13 @@ export default function VideoDownloader() {
               Clear
             </Button>
           </Box>
-
+          
           <Grid container spacing={2} sx={{ mb: 2 }}>
             {recentDownloads.map((item, index) => (
               <Grid item xs={12} sm={6} key={index}>
-                <Card
-                  sx={{
-                    display: "flex",
+                <Card 
+                  sx={{ 
+                    display: "flex", 
                     backgroundColor: "#1E1E1E",
                     cursor: "pointer",
                     transition: "all 0.2s",
@@ -467,17 +445,17 @@ export default function VideoDownloader() {
                     {videoInfo.title}
                   </Typography>
                 </Box>
-
+                
                 <Typography variant="body2" color="#bbb" sx={{ mt: 1, mb: 2, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                   {videoInfo.description || "No description available"}
                 </Typography>
-
-                {videoInfo.duration && videoInfo.duration > 0 && (
+                
+                {videoInfo.duration > 0 && (
                   <Typography variant="body2" color="#888" sx={{ mb: 2 }}>
                     Duration: {Math.floor(videoInfo.duration / 60)}:{(videoInfo.duration % 60).toString().padStart(2, '0')}
                   </Typography>
                 )}
-
+                
                 <FormControl fullWidth variant="outlined" sx={{ mb: 2 }}>
                   <InputLabel id="format-select-label" sx={{ color: "#888" }}>Quality</InputLabel>
                   <Select
@@ -493,7 +471,7 @@ export default function VideoDownloader() {
                       "& .MuiSvgIcon-root": { color: "#888" }
                     }}
                   >
-                    {videoInfo.formats && videoInfo.formats.map((format) => (
+                    {videoInfo.formats.map((format) => (
                       <MenuItem key={format.formatId} value={format.formatId}>
                         {format.qualityLabel || format.resolution} {format.filesize > 0 ? `- ${formatFileSize(format.filesize)}` : ''}
                       </MenuItem>
@@ -513,8 +491,8 @@ export default function VideoDownloader() {
         fullWidth
         size="large"
         startIcon={<FileDownload />}
-        sx={{
-          backgroundColor: "#00A8E8",
+        sx={{ 
+          backgroundColor: "#00A8E8", 
           "&:hover": { backgroundColor: "#0086C2" },
           py: 1.5,
           fontSize: "1rem",
@@ -541,31 +519,19 @@ export default function VideoDownloader() {
               {progress}%
             </Typography>
           </Box>
-          <LinearProgress
-            variant="determinate"
-            value={progress}
-            sx={{
-              height: 10,
+          <LinearProgress 
+            variant="determinate" 
+            value={progress} 
+            sx={{ 
+              height: 10, 
               borderRadius: "5px",
               backgroundColor: "#333",
               "& .MuiLinearProgress-bar": {
                 backgroundColor: "#00A8E8"
               }
-            }}
+            }} 
           />
         </Box>
-      )}
-
-      {!import.meta.env.PROD && (
-        <Typography variant="body2" color="#FFB74D" textAlign="center" mt={1} sx={{ 
-          backgroundColor: 'rgba(255, 183, 77, 0.1)', 
-          padding: 1, 
-          borderRadius: 1,
-          border: '1px solid rgba(255, 183, 77, 0.3)'
-        }}>
-          ⚠️ Development Mode: The video download API requires deployment to Vercel to function properly. 
-          In local development, you'll see "API not available" errors.
-        </Typography>
       )}
       
       <Typography variant="caption" color="#777" textAlign="center" mt={1}>
@@ -577,7 +543,7 @@ export default function VideoDownloader() {
           {error}
         </Alert>
       </Snackbar>
-
+      
       <Snackbar open={success} autoHideDuration={3000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           Video downloaded successfully!
