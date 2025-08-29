@@ -26,6 +26,9 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import DownloadIcon from "@mui/icons-material/Download";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SparkleIcon from "@mui/icons-material/AutoAwesome";
+import ImageIcon from "@mui/icons-material/Image";
+import SecurityIcon from "@mui/icons-material/Security";
+import CodeIcon from "@mui/icons-material/Code";
 
 const tools = [
   {
@@ -91,6 +94,33 @@ const tools = [
     gradient: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)",
     color: "#fcb69f",
   },
+  {
+    title: "Image Converter",
+    description: "Convert images between different formats (JPG, PNG, WebP)",
+    icon: ImageIcon,
+    path: "/image-converter",
+    category: "Converter",
+    gradient: "linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)",
+    color: "#ff6b6b",
+  },
+  {
+    title: "Password Generator",
+    description: "Generate secure, random passwords with customizable options",
+    icon: SecurityIcon,
+    path: "/password-generator",
+    category: "Security",
+    gradient: "linear-gradient(135deg, #4caf50 0%, #45a049 100%)",
+    color: "#4caf50",
+  },
+  {
+    title: "JSON Formatter",
+    description: "Format, validate, and beautify JSON data with syntax highlighting",
+    icon: CodeIcon,
+    path: "/json-formatter",
+    category: "Developer",
+    gradient: "linear-gradient(135deg, #2196f3 0%, #1976d2 100%)",
+    color: "#2196f3",
+  },
 ];
 
 const categories = [
@@ -98,6 +128,8 @@ const categories = [
   "Audio",
   "Generator",
   "Converter",
+  "Security",
+  "Developer",
   "Utility",
   "Extractor",
 ];
