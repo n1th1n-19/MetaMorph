@@ -23,32 +23,32 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Inter", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif',
+    fontFamily: '"Gugi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif',
     h1: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeight: 700,
-      letterSpacing: '-0.02em',
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
+      letterSpacing: '0.02em',
     },
     h2: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeight: 600,
-      letterSpacing: '-0.01em',
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
+      letterSpacing: '0.01em',
     },
     h3: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeight: 600,
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
     },
     h4: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeight: 600,
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
     },
     h5: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeight: 500,
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
     },
     h6: {
-      fontFamily: '"Poppins", sans-serif',
-      fontWeight: 500,
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
     },
     body1: {
       fontFamily: '"Inter", sans-serif',
@@ -59,9 +59,10 @@ const theme = createTheme({
       fontWeight: 400,
     },
     button: {
-      fontFamily: '"Inter", sans-serif',
-      fontWeight: 500,
-      letterSpacing: '0.01em',
+      fontFamily: '"Gugi", sans-serif',
+      fontWeight: 400,
+      letterSpacing: '0.02em',
+      textTransform: 'none',
     },
     caption: {
       fontFamily: '"Inter", sans-serif',
@@ -77,7 +78,7 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          fontFamily: '"Inter", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif',
+          fontFamily: '"Gugi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif',
           fontOpticalSizing: 'auto',
           fontFeatureSettings: '"liga" 1, "calt" 1',
           scrollbarWidth: 'thin',

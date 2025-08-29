@@ -1,7 +1,7 @@
 # MetaMorph
 
 <p align="center">
-  <img src="src/assets/logooo.gif" alt="MetaMorph Logo" width="150" height="150">
+  <img src="public/assets/images/logooo.gif" alt="MetaMorph Logo" width="150" height="150">
 </p>
 
 <p align="center">
@@ -28,13 +28,15 @@ Transform, convert, and enhance your digital content all in one place, without s
 
 | Tool | Description |
 |------|-------------|
-| 🔊 **Text to Speech** | Convert written text into natural-sounding speech |
-| 🎙️ **Speech to Text** | Convert audio recordings into text |
-| 🎵 **Mp4 to Mp3 Converter** | Convert MP4 video files to MP3 audio format |
-| 🔗 **URL Shortener** | Create short, shareable links from long URLs |
-| 📱 **QR Code Generator** | Generate QR codes from text or URLs |
-| 👁️ **OCR Extractor** | Extract text from images using Optical Character Recognition |
-| 📄 **File Converter** | Convert files between different formats |
+| 🔊 **Text to Speech** | Convert written text into natural-sounding speech with download capability |
+| 🎙️ **Speech to Text** | Convert audio recordings into text using advanced recognition |
+| 🎵 **MP4 to MP3 Converter** | Extract high-quality audio from video files |
+| 🔗 **URL Shortener** | Create short, trackable links with click analytics |
+| 📱 **QR Code Generator** | Generate customizable QR codes for any content |
+| 👁️ **OCR Text Extractor** | Extract text from images with high accuracy |
+| 🖼️ **Image Format Converter** | Convert images between JPG, PNG, WebP, and BMP formats |
+| 🔐 **Password Generator** | Generate secure passwords with customizable options |
+| 📋 **JSON Formatter/Validator** | Format, validate, and minify JSON data |
 
 ## <h2 id="demo">Demo</h2>
 
@@ -112,7 +114,7 @@ npm run start
 - **Framework:** Next.js 14 with App Router
 - **Frontend:** React 18 with TypeScript
 - **UI Framework:** Material-UI (MUI) v6
-- **Typography:** Inter + Poppins (Google Fonts)
+- **Typography:** Gugi + Inter (Google Fonts)
 - **Styling:** Emotion CSS-in-JS
 - **Build Tool:** Next.js built-in (Turbopack)
 - **Deployment:** Vercel (optimized)
@@ -134,38 +136,51 @@ MetaMorph/
 ├── app/                          # Next.js App Router
 │   ├── components/
 │   │   └── ClientThemeProvider.tsx
-│   ├── file-converter/
-│   │   ├── layout.tsx           # SEO metadata
-│   │   └── page.tsx
-│   ├── mp4-to-mp3/
+│   ├── image-converter/          # Image format converter
 │   │   ├── layout.tsx
 │   │   └── page.tsx
-│   ├── ocr-extractor/
+│   ├── json-formatter/           # JSON formatter/validator
 │   │   ├── layout.tsx
 │   │   └── page.tsx
-│   ├── qr-code/
+│   ├── mp4-to-mp3/              # Video to audio converter
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── ocr-extractor/           # OCR text extraction
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── password-generator/       # Secure password generator
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── qr-code/                 # QR code generator
 │   │   ├── layout.tsx
 │   │   └── page.tsx
 │   ├── r/
 │   │   └── [code]/
 │   │       └── page.tsx         # Dynamic redirect routes
-│   ├── speech-to-text/
+│   ├── speech-to-text/          # Speech recognition
 │   │   ├── layout.tsx
 │   │   └── page.tsx
-│   ├── to-speech/
+│   ├── to-speech/               # Text-to-speech with download
 │   │   ├── layout.tsx
 │   │   └── page.tsx
-│   ├── url-shortener/
+│   ├── url-shortener/           # URL shortening service
 │   │   ├── layout.tsx
 │   │   └── page.tsx
+│   ├── utils/
+│   │   └── assets.ts            # Asset management utilities
 │   ├── layout.tsx               # Root layout with SEO
 │   ├── page.tsx                 # Homepage
 │   ├── robots.ts                # SEO robots.txt
 │   └── sitemap.ts               # SEO sitemap
 ├── public/
+│   ├── assets/                  # Organized assets folder
+│   │   ├── images/             # Logo and image files
+│   │   ├── icons/              # Icon files
+│   │   ├── fonts/              # Custom fonts
+│   │   └── README.md           # Asset usage guide
 │   ├── manifest.json            # PWA manifest
 │   ├── favicon.ico
-│   └── ...
+│   └── og-image.png            # OpenGraph image
 ├── .env.example                 # Environment variables template
 ├── next.config.mjs              # Next.js configuration
 ├── package.json
@@ -175,14 +190,37 @@ MetaMorph/
 
 ## <h2 id="roadmap">Roadmap</h2>
 
+### ✅ Recently Completed
+- [x] Image format converter (JPG, PNG, WebP, BMP)
+- [x] Password generator with security options
+- [x] JSON formatter and validator
+- [x] Audio download for text-to-speech
+- [x] Real MP4 to MP3 conversion
+- [x] Working URL shortener with analytics
+- [x] Organized assets folder structure
+- [x] Vercel deployment optimization
+- [x] SEO and performance enhancements
+- [x] Modern Gugi typography integration
+
+### 🚧 Up Next
+- [ ] PDF merger and splitter
+- [ ] Image compressor and optimizer
+- [ ] Unit converter (length, weight, temperature)
+- [ ] Color picker and palette generator
+- [ ] Pomodoro timer with task management
+- [ ] Markdown to HTML converter
+- [ ] Hash generator (MD5, SHA1, SHA256)
+- [ ] Base64 encoder/decoder
+- [ ] Lorem ipsum generator
+- [ ] Expense tracker with charts
+
+### 🎯 Future Features
 - [ ] Dark mode and theme customization
 - [ ] Drag-and-drop file support for all converters
 - [ ] Offline mode/PWA support
 - [ ] Batch file processing
-- [ ] Additional audio/video format support
 - [ ] Multi-language text-to-speech voices
 - [ ] Advanced OCR with multiple language support
-- [ ] File compression and optimization tools
 
 ## <h2 id="contributing">Contribution</h2>
 
