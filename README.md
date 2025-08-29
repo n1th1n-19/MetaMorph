@@ -20,9 +20,7 @@
 
 ## 📋 Overview
 
-MetaMorph is a lightweight, modular, multi-utility web application built with React and Node.js. It offers a suite of powerful tools ranging from file conversion and speech recognition to QR code generation and video downloading — all packed into a single seamless interface.
-
-The application features a dedicated backend service for the video downloader component, allowing for efficient handling of video downloads from various sources.
+MetaMorph is a lightweight, modular, multi-utility web application built with React and Node.js. It offers a suite of powerful tools ranging from file conversion and speech recognition to QR code generation — all packed into a single seamless interface.
 
 Transform, convert, and enhance your digital content all in one place, without switching between different apps or services.
 
@@ -36,7 +34,6 @@ Transform, convert, and enhance your digital content all in one place, without s
 | 🎙️ **Speech to Text** | Offline speech recognition using Vosk |
 | 🔊 **Text to Speech** | Convert written text into speech |
 | 🔗 **URL Shortener** | Shrink long links into short ones |
-| 📹 **Video Downloader** | Download videos from various sources |
 | 🖼️ **ASCII Text Generator** | Turn text into ASCII art |
 
 ## <h2 id="demo">Demo</h2>
@@ -66,14 +63,7 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 
 3. **Run the development server:**
    ```bash
-   # Start frontend
    npm run dev
-   
-   # Start backend (in a separate terminal)
-   cd backend
-   npm install
-  
-   node server.js
    ```
 
 4. **Open the app:**
@@ -84,7 +74,6 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 ## <h2 id="tech-stack">Tech Stack</h2>
 
 - **Frontend:** React 18 with JSX, CSS
-- **Backend:** Node.js for the video downloader service
 - **Layout System:** Custom dashboard layout with modular components
 - **Libraries:**
   - Browser-native APIs (File APIs, Canvas, Web Speech API)
@@ -94,11 +83,6 @@ Check out the live demo: [MetaMorph Demo](https://metamorph02.vercel.app)
 ```
 MetaMorph/
 ├── public/
-├── backend/
-│   ├── .gitignore
-│   ├── package-lock.json
-│   ├── package.json
-│   └── server.js
 ├── src/
 │   ├── assets/
 │   ├── Components/
@@ -117,7 +101,6 @@ MetaMorph/
 │   │   ├── SpeechToText.jsx
 │   │   ├── TextoSpeech.jsx
 │   │   ├── URLShortener.jsx
-│   │   ├── VideoDownloader.jsx
 │   │   ├── index.jsx
 │   ├── App.jsx
 │   └── main.jsx
