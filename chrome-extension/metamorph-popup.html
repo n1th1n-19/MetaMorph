@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MetaMorph - Password Generator</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 450px;
+        min-height: 500px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0c0c0c 0%,
+          #1a1a1a 50%,
+          #0c0c0c 100%
+        );
+        color: white;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Background overlay */
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 200px;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(255, 236, 210, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        padding: 20px;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo {
+        font-size: 28px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+      }
+
+      .tagline {
+        font-size: 14px;
+        color: #888;
+        font-weight: 300;
+      }
+
+      /* Input Groups */
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-label {
+        display: block;
+        font-size: 14px;
+        color: #ddd;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      /* Buttons */
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        justify-content: center;
+        min-height: 44px;
+        width: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        color: #333;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(255, 236, 210, 0.3);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ddd;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      /* Sliders */
+      .slider-group {
+        margin-bottom: 20px;
+      }
+
+      .slider-label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #ddd;
+      }
+
+      .slider-value {
+        color: #fcb69f;
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      .slider {
+        width: 100%;
+        height: 6px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+      }
+
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fcb69f;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(252, 182, 159, 0.3);
+        transition: all 0.2s ease;
+      }
+
+      .slider::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+        box-shadow: 0 3px 8px rgba(252, 182, 159, 0.4);
+      }
+
+      .slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #fcb69f;
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(252, 182, 159, 0.3);
+      }
+
+      /* Notification */
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.success {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      }
+
+      .notification.error {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+
+      .notification.warning {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      }
+
+      /* Password Generator specific */
+      .password-result {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+        word-break: break-all;
+        font-family: "Courier New", monospace;
+        font-size: 16px;
+        line-height: 1.4;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .password-placeholder {
+        color: #666;
+        font-style: italic;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .password-strength {
+        margin: 12px 0;
+      }
+
+      .strength-label {
+        font-size: 12px;
+        color: #ddd;
+        margin-bottom: 6px;
+      }
+
+      .strength-bar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      .strength-fill {
+        height: 100%;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+        width: 0%;
+      }
+
+      .strength-fill.weak {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+        width: 25%;
+      }
+
+      .strength-fill.fair {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+        width: 50%;
+      }
+
+      .strength-fill.good {
+        background: linear-gradient(90deg, #3b82f6, #2563eb);
+        width: 75%;
+      }
+
+      .strength-fill.strong {
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        width: 100%;
+      }
+
+      .strength-text {
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 4px;
+        text-align: center;
+      }
+
+      .strength-text.weak {
+        color: #ef4444;
+      }
+      .strength-text.fair {
+        color: #f59e0b;
+      }
+      .strength-text.good {
+        color: #3b82f6;
+      }
+      .strength-text.strong {
+        color: #22c55e;
+      }
+
+      .checkbox-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 6px;
+        transition: background 0.2s ease;
+      }
+
+      .checkbox-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .checkbox-input {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+        background: transparent;
+        cursor: pointer;
+        position: relative;
+        appearance: none;
+        transition: all 0.2s ease;
+      }
+
+      .checkbox-input:checked {
+        background: #fcb69f;
+        border-color: #fcb69f;
+      }
+
+      .checkbox-input:checked::after {
+        content: "✓";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+      }
+
+      .checkbox-label {
+        font-size: 13px;
+        color: #ddd;
+        cursor: pointer;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 400px) {
+        .btn-group {
+          flex-direction: column;
+        }
+
+        .checkbox-group {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo">🔐 Password Generator</div>
+        <div class="tagline">Create secure passwords with custom options</div>
+      </div>
+
+      <!-- Password Result -->
+      <div id="pwd-result" class="password-result">
+        <div class="password-placeholder">
+          Click "Generate Password" to create a secure password
+        </div>
+      </div>
+
+      <!-- Password Strength -->
+      <div class="password-strength">
+        <div class="strength-label">Password Strength</div>
+        <div class="strength-bar">
+          <div id="pwd-strength-fill" class="strength-fill"></div>
+        </div>
+        <div id="pwd-strength-text" class="strength-text">Not generated</div>
+      </div>
+
+      <!-- Length Slider -->
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Password Length</span>
+          <span id="pwd-length-value" class="slider-value">12</span>
+        </div>
+        <input
+          type="range"
+          id="pwd-length"
+          class="slider"
+          min="4"
+          max="128"
+          value="12"
+        />
+      </div>
+
+      <!-- Character Options -->
+      <div class="input-group">
+        <label class="input-label">Include Characters</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input
+              type="checkbox"
+              id="pwd-uppercase"
+              class="checkbox-input"
+              checked
+            />
+            <label for="pwd-uppercase" class="checkbox-label"
+              >Uppercase (A-Z)</label
+            >
+          </div>
+          <div class="checkbox-item">
+            <input
+              type="checkbox"
+              id="pwd-lowercase"
+              class="checkbox-input"
+              checked
+            />
+            <label for="pwd-lowercase" class="checkbox-label"
+              >Lowercase (a-z)</label
+            >
+          </div>
+          <div class="checkbox-item">
+            <input
+              type="checkbox"
+              id="pwd-numbers"
+              class="checkbox-input"
+              checked
+            />
+            <label for="pwd-numbers" class="checkbox-label"
+              >Numbers (0-9)</label
+            >
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="pwd-symbols" class="checkbox-input" />
+            <label for="pwd-symbols" class="checkbox-label"
+              >Symbols (!@#$)</label
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-group">
+        <button id="pwd-generate" class="btn btn-primary">
+          🔐 Generate Password
+        </button>
+      </div>
+
+      <div class="btn-group" style="margin-top: 12px">
+        <button id="pwd-copy" class="btn btn-secondary" disabled>
+          📋 Copy to Clipboard
+        </button>
+        <button id="pwd-refresh" class="btn btn-secondary" disabled>
+          🔄 Generate New
+        </button>
+      </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="metamorph-popup.js"></script>
+  </body>
+</html>
